@@ -47,7 +47,7 @@ jobs:
           git push          
           git tag -a v${VERSION} -m "Release version ${VERSION}"          
           git checkout --track origin/release
-          git rebase master          
+          git rebase main          
           git push --follow-tags
 
       - name: Release
