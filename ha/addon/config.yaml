@@ -4,14 +4,14 @@ arch:
   - armhf
   - armv7
   - i386
-description: Python-based controls for Tasmota devices.
+description: Home Assistant Control Objects
 init: false
 map:
   - config:rw
 name: haco
-options:
-#panel_icon: mdi:nature-people
-schema:
+options: { }
+panel_icon: mdi:network-pos
+schema: { }
 services:
   - mqtt:need
 slug: haco

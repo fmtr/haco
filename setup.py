@@ -23,7 +23,8 @@ setup(
         name: [f'version'],
     },
     install_requires=[
-        'aiomqtt'
+        'aiomqtt',
+        'pyyaml'
     ],
     extras_require={
         'tasmota': [
