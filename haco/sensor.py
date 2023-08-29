@@ -1,4 +1,4 @@
-import schema
+from haco import schema
 from haco.control import Control
 
 

@@ -1,6 +1,4 @@
 from haco.climate import Climate
-from haco.debugging import get_memory_sensor
-from haco.device import Device
 from haco.number import Number
 from haco.pulldown import Pulldown
 from haco.sensor import Sensor
@@ -152,9 +150,6 @@ def tasmota(value: str):
 text = Text('Dev Text Test Control')
 password = Password('Dev Password Test Control')
 
-from haco.configs.development import text, password
-from haco.tasmota import Tasmota
-
 
 @text.callback()
 def ha(value: str) -> Tasmota[str, 'tasmota.cmd("var11 "+str(value))']:
@@ -174,9 +169,3 @@ def ha(value: str) -> Tasmota[str, 'tasmota.cmd("var14 "+str(value))']:
 @password.callback('var14#state')
 def tasmota(value: str):
     return value
-
-
-dev_dehum = Device(
-    mac='8C:4B:14:85:8D:98',
-    controls=[number, climate, text, password, sensor, pulldown, get_memory_sensor()]
-)
