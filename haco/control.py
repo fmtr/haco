@@ -27,7 +27,7 @@ class Control:
 
     def __init__(self, name, icon=None):
 
-        from device import Device
+        from haco.device import Device
 
         self.name = name
 
