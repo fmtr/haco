@@ -1,27 +1,36 @@
 from importlib import reload
 
 import importlib.util
+import json
 import os
-import yaml
 from pathlib import Path
 
+from haco import tools
 from haco.control import Control
 from haco.device import Device
 
 CONFIGS_PATH = Path(os.environ['HACO_CONFIGS_PATH'])
+OPTIONS_PATH = Path(os.environ['HACO_OPTIONS_PATH'])
 
 
-def load_yaml_file(file_path):
-    with open(file_path, 'r') as yaml_file:
-        data = yaml.safe_load(yaml_file)
+def load_json(file_path):
+    with open(file_path, 'r') as json_file:
+        data = json.loads(json_file.read())
     return data
 
 
-def load_controls_from_directory(directory_path):
-    assn = load_yaml_file(directory_path / 'assignments.yaml')
+def load_controls_from_directory():
+    if not CONFIGS_PATH.exists():
+        tools.logger.warning(f'Configs path does not exist. Will be created: {CONFIGS_PATH}')
+        CONFIGS_PATH.mkdir()
+
+    options = load_json(OPTIONS_PATH)
 
     controls = []
-    for name, macs in assn.items():
+    for data in options['assignments']:
+
+        name = data['config']
+        macs = data['identifier']
 
         if type(macs) is not list:
             macs = [macs]
@@ -32,7 +41,7 @@ def load_controls_from_directory(directory_path):
 
             args = {'mac': mac}
 
-            py_file = directory_path / Path(name).with_suffix('.py')
+            py_file = CONFIGS_PATH / Path(name).with_suffix('.py')
             module_name = py_file.stem
 
             try:
@@ -57,6 +66,6 @@ def load_controls_from_directory(directory_path):
 
 
 def load_devices():
-    devices_args = load_controls_from_directory(CONFIGS_PATH)
+    devices_args = load_controls_from_directory()
     devices = [Device(**args) for args in devices_args]
     return devices

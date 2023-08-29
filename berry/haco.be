@@ -4,6 +4,8 @@ var mod = module("haco")
 
 var logger=tools.logger.logger
 
+logger.level=4
+logger.log_repl=true
 
 var CALLBACK_MAP={}
 var BRANCH='release'
