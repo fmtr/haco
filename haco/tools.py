@@ -1,7 +1,13 @@
 import hashlib
+import logging
 
 from haco import constants, tuya
 from haco.tasmota import Tasmota
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+
 
 
 def split_into_chunks(input_string, chunk_size):
@@ -30,20 +36,20 @@ def truncate_middle(input_string, max_length):
 async def log_publish(client, topic, payload, retain=False):
     log_retain = '|' if retain else ' '
     message = f'mqtt->{log_retain} {topic} {truncate_middle(payload, 100)}'
-    print(message)
+    logger.debug(message)
     await client.publish(topic=topic, payload=payload, retain=retain)
 
 
 async def log_subscribe(client, topic):
     message = f'mqtt+{topic}'
-    print(message)
+    logger.debug(message)
     await client.subscribe(topic=topic)
 
 
 async def log_received(message):
     log_retain = '|' if message.retain else ' '
     message = f'mqtt<-{log_retain} {message.topic} {truncate_middle(message.payload.decode("utf-8"), 100)}'
-    print(message)
+    logger.debug(message)
 
 
 def callback_default(value, data=None):

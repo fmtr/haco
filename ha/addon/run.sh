@@ -7,4 +7,6 @@ export MQTT_PASSWORD="$(bashio::services mqtt 'password')"
 export MQTT_PORT="$(bashio::services mqtt 'port')"
 export MQTT_USERNAME="$(bashio::services mqtt 'username')"
 
+cp /data/options.json /config/haco/options.json
+
 haco-daemon

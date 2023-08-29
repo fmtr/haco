@@ -9,9 +9,15 @@ init: false
 map:
   - config:rw
 name: haco
-options: { }
+options:
+  assignments:
+    - config: null
+      identifier: null
 panel_icon: mdi:network-pos
-schema: { }
+schema:
+  assignments:
+    - config: str
+      identifier: str
 services:
   - mqtt:need
 slug: haco
