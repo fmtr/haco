@@ -37,7 +37,7 @@ jobs:
           git config --global user.email 'actions@frontmatter.ai'          
           echo -n ${VERSION} > version
           python3 update_version.py ${VERSION}
-          tappack --module-path module/ --output ./${NAME_SHORT}.tapp
+          tappack --module-path berry/ --output ./${NAME_SHORT}.tapp
           
           git add ${NAME}/version
           git add berry/${NAME_SHORT}_version.be
