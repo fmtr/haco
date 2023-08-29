@@ -1,0 +1,70 @@
+name: Version and Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'
+        required: true
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      VERSION: ${{ github.event.inputs.version }}
+      NAME: ${{ github.event.repository.name }}
+      NAME_SHORT: ${{ github.event.repository.name }}
+      ORG: ${{ github.repository_owner }}
+      REBRANDLY_API_KEY: ${{ secrets.REBRANDLY_API_KEY }}
+      LINK_ID: ca4942821f5740fbaa46d1066b5cd7e4
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+
+      - name: Install Tools
+        run: |
+          pip install twine tappack
+
+      - name: Increment Version
+        run: |
+          
+          git config --global user.name 'Frontmatter Actions'
+          git config --global user.email 'actions@frontmatter.ai'          
+          echo -n ${VERSION} > version
+          python3 update_version.py ${VERSION}
+          tappack --module-path module/ --output ./${NAME_SHORT}.tapp
+          
+          git add ${NAME}/version
+          git add berry/${NAME_SHORT}_version.be
+          git add ha/addon/config.yaml
+          
+          git commit -am "Increment version number to ${VERSION} for release"
+          git push          
+          git tag -a v${VERSION} -m "Release version ${VERSION}"          
+          git checkout --track origin/release
+          git rebase master          
+          git push --follow-tags
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: haco.tapp
+          tag_name: v${{ github.event.inputs.version }}
+          generate_release_notes: true
+
+      - name: Build Wheel
+        run: |
+          python setup.py sdist bdist_wheel
+
+      - name: Push Wheel
+        env:
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+          TWINE_USERNAME: __token__
+        run: |
+          twine upload dist/*
+

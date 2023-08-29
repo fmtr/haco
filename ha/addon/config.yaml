@@ -1,0 +1,19 @@
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+description: Python-based controls for Tasmota devices.
+init: false
+map:
+  - config:rw
+name: haco
+options:
+#panel_icon: mdi:nature-people
+schema:
+services:
+  - mqtt:need
+slug: haco
+url: https://link.frontmatter.ai/haco
+version: 0.0.0

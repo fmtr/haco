@@ -1,0 +1,28 @@
+name: haco
+
+autoexec:
+  import: false
+  .channels:
+    development:
+      import: true
+
+dependencies:
+
+  tools:
+    .type: GitHubReleaseAsset
+    org: fmtr
+    repo: tools.be
+    filename: tools.tapp
+
+    .channels:
+      development:
+        .type: LocalPath
+        path: /fm/tools.be/module
+
+patches:
+  - .channels:
+      development:
+        .type: Version
+        path: haco_version.be
+        pattern: \bvar\s+VERSION\s*=\s*'{version}'
+
