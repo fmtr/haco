@@ -3,7 +3,7 @@ from typing import List
 from haco.control import Control
 
 
-class Pulldown(Control):
+class Select(Control):
     NAME = 'select'
 
     def __init__(self, name, options: List[str], icon=None):

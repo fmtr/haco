@@ -52,6 +52,8 @@ def load_controls_from_directory():
                 module = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(module)
 
+            args['config_module'] = module
+
             for obj_name in dir(module):
                 obj = getattr(module, obj_name)
                 if obj_name == 'DEVICE_CONFIG':

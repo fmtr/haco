@@ -40,7 +40,7 @@ class ConfigDownloader
 
 
         if self.id_downloading && self.id_downloading==id
-            logger.error(string.format("Got duplicate new config (same as currently being download) ID: %s. Will be ignored.",id))
+            logger.error(string.format("Got duplicate new config (same as currently being downloaded) ID: %s. Will be ignored.",id))
             return
         end
 

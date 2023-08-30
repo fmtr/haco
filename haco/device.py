@@ -9,8 +9,9 @@ from haco.tools import log_publish, split_into_chunks, log_subscribe
 
 class Device:
 
-    def __init__(self, mac, controls: List[Control], run_config_post=None):
+    def __init__(self, mac, config_module, controls: List[Control], run_config_post=None):
         self.name = None
+        self.config_module = config_module
         self.topic = None
         self.hostname = None
         self.mac = mac
@@ -103,7 +104,8 @@ class Device:
             await log_subscribe(client, str(topic))
 
     async def bind(self, client, data_announce):
-        print(f'Found match for self: {self}')
+        msg = f'Found device with matching config {self.config_module.__name__}: Hostname: {data_announce["hostname"]} MAC:{self.mac}'
+        tools.logger.info(msg)
         self.name = data_announce['device_name']
         self.topic = data_announce['topic']
         self.hostname = data_announce['hostname']

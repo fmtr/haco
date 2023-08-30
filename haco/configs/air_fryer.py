@@ -1,14 +1,11 @@
 import math
 
-from haco import tuya
-from haco.pulldown import Pulldown
-from haco.sensor import Sensor
-from haco.tasmota import Tasmota
+from haco import Tasmota, Number, Sensor, Select, Switch, tuya
 from haco.tools import add_tuya_io
 
 OPTIONS = ['Default', 'Fries', 'Shrimp', 'Pizza', 'Chicken', 'Fish', 'Steak', 'Cake', 'Bacon', 'Preheat', 'Custom']
 
-cookbook = Pulldown('Cookbook', options=OPTIONS, icon='mdi:chef-hat')
+cookbook = Select('Cookbook', options=OPTIONS, icon='mdi:chef-hat')
 
 
 @cookbook.callback()
@@ -33,11 +30,6 @@ time_remaining = Sensor(
 def tasmota(value: int):
     return value
 
-
-from haco.switch import Switch
-
-from haco.number import Number
-from haco import tuya
 
 cooking_time = Number(
     name='Cooking Time',

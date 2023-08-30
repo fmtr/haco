@@ -1,6 +1,6 @@
 from haco.climate import Climate
 from haco.number import Number
-from haco.pulldown import Pulldown
+from haco.pulldown import Select
 from haco.sensor import Sensor
 from haco.tasmota import Tasmota
 from haco.text import Text, Password
@@ -123,7 +123,7 @@ def temperature_low_tasmota(value: int):
     return value
 
 
-pulldown = Pulldown(
+pulldown = Select(
     'Dev Select Test Control',
     options=list('ABC')
 )

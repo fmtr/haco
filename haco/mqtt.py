@@ -1,11 +1,10 @@
 import aiomqtt
 import asyncio
 import json
-import logging
 import os
 from pathlib import Path
 
-from haco import constants
+from haco import constants, tools
 from haco.device import Device
 from haco.load_configs import load_devices
 from haco.tools import log_received
@@ -27,25 +26,27 @@ async def listen(client, devices):
             if message.topic.matches(TOPIC_ANNOUNCE):
 
                 if not message.payload:
-                    logging.warning(f'Topic {message.topic.value} got empty payload. It may have been deleted.')
+                    msg = f'Topic {message.topic.value} got empty payload. It may have been deleted.'
+                    tools.logger.info(msg)
                     continue
 
                 data_announce = json.loads(message.payload)
                 mac = data_announce['wifi']['mac']
                 if mac not in devices:
-                    print(f'Got announce from device with no config: {data_announce}')
+                    msg = f'Got announce from device with no config: Hostname: {data_announce["hostname"]} MAC:{data_announce["mac"]}. Publishing config data.'
+                    tools.logger.info(msg)
                     continue
 
                 device: Device = devices[mac]
 
                 if device.config_id and data_announce['config_id'] == device.config_id:
-                    print(f'Device {device.name} ({device.hostname}:{device.mac}) successfully configured.')
+                    msg = f'Device {device.name} successfully configured. Hostname: {device.hostname} MAC:{device.mac}'
+                    tools.logger.info(msg)
                     continue
 
                 await device.bind(client, data_announce)
                 devices[device.hostname] = device
 
-                device
 
             else:
                 _, _, device_name, _, control, capability_id, platform, io = Path(message.topic.value).parts
