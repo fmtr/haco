@@ -48,25 +48,6 @@ def tasmota(value: int):
 def ha(value: int) -> Tasmota[int, tuya.send(2, 7)]:
     return value
 
-
-cooking_temp = Number(
-    name='Cooking Temperature (F)',
-    number_range=range(1, 60),
-    uom='minutes',
-    icon='mdi:timer'
-)
-
-
-@cooking_temp.callback(trigger=tuya.received(2, 7))
-def tasmota(value: int):
-    return value
-
-
-@cooking_temp.callback()
-def ha(value: int) -> Tasmota[int, tuya.send(2, 7)]:
-    return value
-
-
 cooking_temp_f = Number(
     'Cooking Temperature (F)',
     number_range=range(170, 399),
