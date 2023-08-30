@@ -36,7 +36,8 @@ class Control:
         self.get = self.schema.get
         self.schema.control = self
 
-        self.icon = icon
+        self.icon = f'mdi:{icon}' if icon else icon
+        self.icon
 
     @property
     def name_sanitized(self):

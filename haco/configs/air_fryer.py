@@ -5,7 +5,7 @@ from haco.tools import add_tuya_io
 
 OPTIONS = ['Default', 'Fries', 'Shrimp', 'Pizza', 'Chicken', 'Fish', 'Steak', 'Cake', 'Bacon', 'Preheat', 'Custom']
 
-cookbook = Select('Cookbook', options=OPTIONS, icon='mdi:chef-hat')
+cookbook = Select('Cookbook', options=OPTIONS, icon='chef-hat')
 
 
 @cookbook.callback()
@@ -21,7 +21,7 @@ def tasmota(value: int):
 time_remaining = Sensor(
     name='Time Remaining',
     uom='minutes',
-    icon='mdi:timer',
+    icon='timer',
     device_class='DURATION'
 )
 
@@ -35,7 +35,7 @@ cooking_time = Number(
     name='Cooking Time',
     number_range=range(1, 60),
     uom='minutes',
-    icon='mdi:timer'
+    icon='timer'
 )
 
 
@@ -53,7 +53,7 @@ cooking_temp_f = Number(
     number_range=range(170, 399),
     mode='slider',
     uom='°F',
-    icon='mdi:temperature-fahrenheit'
+    icon='temperature-fahrenheit'
 )
 
 
@@ -72,7 +72,7 @@ cooking_temp_c = Number(
     number_range=range(77, 204),
     mode='slider',
     uom='°C',
-    icon='mdi:temperature-celsius'
+    icon='temperature-celsius'
 )
 
 
@@ -88,14 +88,14 @@ def tasmota(value: float):
 
 cook_pause = Switch(
     name='Cook/Pause',
-    icon='mdi:play-pause'
+    icon='play-pause'
 )
 
 add_tuya_io(cook_pause, int, 1, 2)
 
 power = Switch(
     name='Power',
-    icon='mdi:power'
+    icon='power'
 )
 
 add_tuya_io(power, int, 1, 1)
@@ -104,14 +104,14 @@ delay_time = Number(
     name='Delay Time',
     number_range=range(0, 720),
     uom='minutes',
-    icon='mdi:timer-pause'
+    icon='timer-pause'
 )
 
 add_tuya_io(delay_time, int, 2, 6)
 
 status = Sensor(
     name='Status',
-    icon='mdi:playlist-play',
+    icon='playlist-play',
     device_class='ENUM'
 )
 
@@ -119,7 +119,7 @@ keep_warm_time = Number(
     name='Keep Warm Time',
     number_range=range(0, 120),
     uom='minutes',
-    icon='mdi:timer-sync'
+    icon='timer-sync'
 )
 
 add_tuya_io(keep_warm_time, int, 2, 105)

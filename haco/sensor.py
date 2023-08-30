@@ -1,9 +1,15 @@
 from haco import schema
 from haco.control import Control
+from haco.data.type_sensor import DeviceClassSensor
+
+from haco.data.uom import Uom
 
 
 class Sensor(Control):
     NAME = 'sensor'
+
+    DEVICE_CLASS = DeviceClassSensor
+    UOM = Uom
 
     @classmethod
     def get_schema(cls):
