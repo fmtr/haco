@@ -2,10 +2,17 @@ import tools, string, json, mqtt
 
 var mod = module("haco")
 
-var logger=tools.logger.logger
+import haco_version
 
-logger.level=4
-logger.log_repl=true
+var IS_DEVELOPMENT=haco_version.CHANNEL_ID=='development'
+
+var logger=tools.logging.Logger(
+    'haco',
+    IS_DEVELOPMENT?tools.logging.Logger.DEBUG_MORE:tools.logging.Logger.INFO,
+    IS_DEVELOPMENT
+)
+
+tools.logger.logger=logger
 
 var CALLBACK_MAP={}
 var BRANCH='release'
@@ -40,15 +47,17 @@ class ConfigDownloader
 
 
         if self.id_downloading && self.id_downloading==id
-            logger.error(string.format("Got duplicate new config (same as currently being downloaded) ID: %s. Will be ignored.",id))
+            logger.debug(string.format("Got duplicate new config (same as currently being downloaded) ID: %s. Will be ignored.",id))
             return
         end
 
-        logger.debug(string.format("Received new config. ID: %s. Parts: %s",id,num_parts))
+
 
         if self.id_downloading
             logger.error(string.format("Got new config ID: %s while existing download ID: %s incomplete.",id,self.id_downloading))
         end
+
+        logger.info(string.format("Downloading new config. ID: %s. Parts: %s",id,num_parts))
 
         self.id_downloading=id
 
@@ -164,7 +173,7 @@ class Daemon
 
     def init()
 
-        logger.info(['Starting haco daemon...'])
+        logger.info(string.format('Starting haco daemon in %s seconds...', self.DELAY_SUBSCRIBE))
 
         self.registry_daemon=tools.callbacks.Registry()
         self.registry_config=tools.callbacks.Registry()
@@ -188,6 +197,8 @@ class Daemon
         self.registry_daemon.add(rule_config)
 
         if mqtt.connected() self.publish_announce() end
+
+        logger.info(string.format('haco daemon has started.', self.DELAY_SUBSCRIBE))
 
     end
 
@@ -258,7 +269,7 @@ class Daemon
         self.config_id=id
         self.publish_announce()
 
-        logger.info(string.format('New config ID %s applied.',id))
+        logger.info(string.format('New config ID %s applied successfully.',id))
 
     end
 
@@ -315,8 +326,7 @@ class Daemon
 
 end
 
-
-mod.daemon=Daemon()
-
+mod.Daemon=Daemon
+mod.daemon=nil
 
 return mod
