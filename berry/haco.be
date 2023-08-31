@@ -173,7 +173,7 @@ class Daemon
 
     def init()
 
-        logger.info(string.format('Starting haco daemon in %s seconds...', self.DELAY_SUBSCRIBE))
+        logger.info(string.format('Starting haco daemon (v%s) in %s seconds...',haco_version.VERSION, self.DELAY_SUBSCRIBE))
 
         self.registry_daemon=tools.callbacks.Registry()
         self.registry_config=tools.callbacks.Registry()
@@ -187,7 +187,7 @@ class Daemon
 
     def subscribe_daemon()
 
-        var rule_announce=tools.callbacks.Rule('mqtt#connected',/->print('announced called by mqtt#connected',self.publish_announce()))
+        var rule_announce=tools.callbacks.Rule('mqtt#connected',/->self.publish_announce())
         self.registry_daemon.add(rule_announce)
 
         var rule_config=tools.callbacks.MqttSubscription(
@@ -198,7 +198,7 @@ class Daemon
 
         if mqtt.connected() self.publish_announce() end
 
-        logger.info(string.format('haco daemon has started.', self.DELAY_SUBSCRIBE))
+        logger.info(string.format('The haco daemon has started. Hostname: %s, MAC: %s. Listening for configuration...', tasmota.hostname(), tools.network.get_mac()))
 
     end
 
@@ -222,9 +222,11 @@ class Daemon
     def get_data_announce()
 
         return {
+            'version': haco_version.VERSION,
             'hostname': tasmota.hostname(),
             'eth': tasmota.eth(),
             'wifi': tasmota.wifi(),
+            'mac': tools.network.get_mac(),
             'timestamp': tasmota.rtc(),
             'config_id': self.config_id,
             'topic': tools.mqtt.get_topic(),

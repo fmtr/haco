@@ -30,39 +30,32 @@ def load_controls_from_directory():
     for data in options['assignments']:
 
         name = data['config']
-        macs = data['identifier']
+        identifier = data['identifier']
 
-        if type(macs) is not list:
-            macs = [macs]
+        args = {'identifier': identifier}
 
-        macs
+        py_file = CONFIGS_PATH / Path(name).with_suffix('.py')
+        module_name = py_file.stem
 
-        for mac in macs:
+        try:
+            module = importlib.import_module(f'haco.configs.{module_name}')
+            reload(module)
+        except ImportError:
+            spec = importlib.util.spec_from_file_location(module_name, str(py_file))
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
 
-            args = {'mac': mac}
+        args['config_module'] = module
 
-            py_file = CONFIGS_PATH / Path(name).with_suffix('.py')
-            module_name = py_file.stem
+        for obj_name in dir(module):
+            obj = getattr(module, obj_name)
+            if obj_name == 'DEVICE_CONFIG':
+                args.update(obj)
+            if isinstance(obj, Control):
+                args.setdefault('controls', [])
+                args['controls'].append(obj)
 
-            try:
-                module = importlib.import_module(f'haco.configs.{module_name}')
-                reload(module)
-            except ImportError:
-                spec = importlib.util.spec_from_file_location(module_name, str(py_file))
-                module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(module)
-
-            args['config_module'] = module
-
-            for obj_name in dir(module):
-                obj = getattr(module, obj_name)
-                if obj_name == 'DEVICE_CONFIG':
-                    args.update(obj)
-                if isinstance(obj, Control):
-                    args.setdefault('controls', [])
-                    args['controls'].append(obj)
-
-            controls.append(args)
+        controls.append(args)
 
     return controls
 

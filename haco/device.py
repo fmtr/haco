@@ -9,12 +9,13 @@ from haco.tools import log_publish, split_into_chunks, log_subscribe
 
 class Device:
 
-    def __init__(self, mac, config_module, controls: List[Control], run_config_post=None):
+    def __init__(self, identifier, config_module, controls: List[Control], run_config_post=None):
         self.name = None
         self.config_module = config_module
         self.topic = None
         self.hostname = None
-        self.mac = mac
+        self.mac = None
+        self.identifier = identifier
         self.run_config_post = run_config_post
         self.controls = controls
         self.config_id = None
@@ -109,6 +110,7 @@ class Device:
         self.name = data_announce['device_name']
         self.topic = data_announce['topic']
         self.hostname = data_announce['hostname']
+        self.mac = data_announce['mac']
 
         await self.do_subscriptions(client)
 

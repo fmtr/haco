@@ -31,16 +31,22 @@ async def listen(client, devices):
                     continue
 
                 data_announce = json.loads(message.payload)
-                mac = data_announce['wifi']['mac']
-                if mac not in devices:
+
+                identifiers = {data_announce['wifi'].get('mac'), data_announce['eth'].get('mac'),
+                               data_announce['hostname'], data_announce['mac']}
+
+                for identifier in identifiers:
+                    device: Device = devices.get(identifier)
+                    if device:
+                        break
+
+                if not device:
                     msg = f'Got announce from device with no config: Hostname: {data_announce["hostname"]} MAC:{data_announce["mac"]}. Publishing config data.'
                     tools.logger.info(msg)
                     continue
 
-                device: Device = devices[mac]
-
                 if device.config_id and data_announce['config_id'] == device.config_id:
-                    msg = f'Device {device.name} successfully configured. Hostname: {device.hostname} MAC:{device.mac}'
+                    msg = f'Device "{device.name}" successfully configured. Hostname: {device.hostname} MAC:{device.mac}'
                     tools.logger.info(msg)
                     continue
 
@@ -56,7 +62,7 @@ async def listen(client, devices):
 
 async def start_mqtt():
     devices = load_devices()
-    devices = {device.mac: device for device in devices}
+    devices = {device.identifier: device for device in devices}
 
     async with aiomqtt.Client(hostname=MQTT_HOST, port=MQTT_PORT, username=MQTT_USERNAME,
                               password=MQTT_PASSWORD) as client:
