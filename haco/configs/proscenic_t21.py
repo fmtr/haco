@@ -20,9 +20,9 @@ def tasmota(value: int):
 
 time_remaining = Sensor(
     name='Time Remaining',
-    uom='minutes',
+    uom=Sensor.UOM.TIME_MINUTES,
     icon='timer',
-    device_class='DURATION'
+    device_class=Sensor.DEVICE_CLASS.DURATION
 )
 
 
@@ -34,7 +34,7 @@ def tasmota(value: int):
 cooking_time = Number(
     name='Cooking Time',
     number_range=range(1, 60),
-    uom='minutes',
+    uom=Number.UOM.TIME_MINUTES,
     icon='timer'
 )
 
@@ -52,7 +52,7 @@ cooking_temp_f = Number(
     'Cooking Temperature (F)',
     number_range=range(170, 399),
     mode='slider',
-    uom='°F',
+    uom=Number.UOM.TEMP_FAHRENHEIT,
     icon='temperature-fahrenheit'
 )
 
@@ -71,7 +71,7 @@ cooking_temp_c = Number(
     'Cooking Temperature (C)',
     number_range=range(77, 204),
     mode='slider',
-    uom='°C',
+    uom=Number.UOM.TEMP_CELSIUS,
     icon='temperature-celsius'
 )
 
@@ -103,7 +103,7 @@ add_tuya_io(power, int, 1, 1)
 delay_time = Number(
     name='Delay Time',
     number_range=range(0, 720),
-    uom='minutes',
+    uom=Sensor.UOM.TIME_MINUTES,
     icon='timer-pause'
 )
 
@@ -112,22 +112,21 @@ add_tuya_io(delay_time, int, 2, 6)
 status = Sensor(
     name='Status',
     icon='playlist-play',
-    device_class='ENUM'
+    device_class=Sensor.DEVICE_CLASS.ENUM
 )
-
-keep_warm_time = Number(
-    name='Keep Warm Time',
-    number_range=range(0, 120),
-    uom='minutes',
-    icon='timer-sync'
-)
-
-add_tuya_io(keep_warm_time, int, 2, 105)
 
 
 @status.callback(trigger=tuya.received(4, 5))
 def tasmota(value: int):
     return ['Ready', 'Delayed Cook', 'Cooking', 'Keep Warm', 'Off', 'Cooking Complete'][value]
 
+keep_warm_time = Number(
+    name='Keep Warm Time',
+    number_range=range(0, 120),
+    uom=Sensor.UOM.TIME_MINUTES,
+    icon='timer-sync'
+)
+
+add_tuya_io(keep_warm_time, int, 2, 105)
 
 DEVICE_CONFIG = {'run_config_post': f'def () return tasmota.cmd("TuyaSend0") end'}

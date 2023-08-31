@@ -4,7 +4,7 @@ import inspect
 import typing
 from typing import _AnnotatedAlias
 
-from haco import berry
+from haco import berry, schema
 from haco.trigger import Trigger, Rule
 
 Signature = namedtuple('Signature', ['type', 'expression'])
@@ -66,7 +66,7 @@ class Callback:
         known_args = {'value', 'data'}
         skip_args = {'control'}
 
-        if self.platform == 'tasmota':
+        if self.platform == schema.Tasmota.PLATFORM:
 
             berry_exp = {}
             for name, (type, exp) in arg_data.items():
@@ -76,7 +76,7 @@ class Callback:
                         continue
 
                     if name not in known_args:
-                        msg = f'Callback {self.function_name} argument {name} requires a Berry expression annotation.'
+                        msg = f'Callback "{self.function_name}" argument "{name}" requires a Berry expression annotation.'
                         raise ValueError(msg)
 
                     exp = name
@@ -104,6 +104,6 @@ class Callback:
 
         self.function_tasmota
 
-        if self.platform == 'tasmota':
+        if self.platform == schema.Tasmota.PLATFORM:
             if not self.trigger:
-                raise ValueError(f'Callback {self.function_name} must have a trigger.')
+                raise ValueError(f'Callback "{self.function_name}" must have a trigger.')
