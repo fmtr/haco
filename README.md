@@ -21,7 +21,7 @@ def ha(value) -> Tasmota[str, 'tasmota.cmd("restart 1")']:
 
 A fully functional restart button will now appear associated with the device in Home Assistant:
 
-<img alt="Restart Button" height=50% src="https://github.com/fmtr/haco/tree/release/assets/restart_button.png" width=50%/>
+<img alt="Restart Button" height=50% src="https://raw.githubusercontent.com/fmtr/haco/release/assets/restart_button.png" width=50%/>
 
 Or, more practically, a cookbook pull-down menu, for a Tuya air fryer, might look like this:
 
@@ -41,7 +41,7 @@ def tasmota(value: int):
     return OPTIONS[value]
 ```
 
-<img alt="Air Fryer Cookbook" height=50% src="https://github.com/fmtr/haco/tree/release/assets/air_fryer_cookbook.png" width=50%/>
+<img alt="Air Fryer Cookbook" height=50% src="https://raw.githubusercontent.com/fmtr/haco/release/assets/air_fryer_cookbook.png" width=50%/>
 
 ## Do I Need This? Can't I Do this with Native Tasmota?
 
@@ -139,7 +139,7 @@ Device "Tasmota Test Device" successfully configured. Hostname: tasmota-test MAC
 In Home Assistant, find the device in [the Devices section](https://my.home-assistant.io/redirect/devices/). You should
 now see a test Select (pulldown) control called "Greeter".
 
-<img alt="WebLog Select" height=50% src="https://github.com/fmtr/haco/tree/release/assets/greeter_select.png" width=50%/>
+<img alt="WebLog Select" height=50% src="https://raw.githubusercontent.com/fmtr/haco/release/assets/greeter_select.png" width=50%/>
 
 Selecting the greetings from the pulldown, you should see them appear in your Tasmota Berry console, e.g.
 
@@ -207,7 +207,7 @@ def tasmota(value: int):
 
 ```
 
-<img alt="Memory Sensor" height=50% src="https://github.com/fmtr/haco/tree/release/assets/memory_sensor.png" width=50%/>
+<img alt="Memory Sensor" height=50% src="https://raw.githubusercontent.com/fmtr/haco/release/assets/memory_sensor.png" width=50%/>
 
 Let's break this control definition down into the control object, the callback decorator, and the callback itself.
 
@@ -320,7 +320,7 @@ as their corresponding number values (`WebLog 1`, `WebLog2`) used by Tasmota.
 The `tasmota` callback, naturally enough, does the exact opposite, returning the string names to Home Assistant whenever
 the `WebLog` command is used on the Tasmota side.
 
-<img alt="WebLog Select" height=50% src="https://github.com/fmtr/haco/tree/release/assets/weblog_select.png" width=50%/>
+<img alt="WebLog Select" height=50% src="https://raw.githubusercontent.com/fmtr/haco/release/assets/weblog_select.png" width=50%/>
 
 #### Debugging Your Configuration
 
