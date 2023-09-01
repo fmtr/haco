@@ -81,7 +81,8 @@ Installation involves installing two parts: the Tasmota daemon and the Home Assi
 ### Tasmota
 
 I'd advise first using a guinea pig Tasmota device to get `haco` up and running. The device needs to have MQTT
-connected and be available to Home Assistant (i.e. showing up in the Devices section).
+connected and be available to Home Assistant (i.e. showing up
+in [the Devices section](https://my.home-assistant.io/redirect/devices/)).
 
 Once your test device is ready, with a recent (12.5+) version of Tasmota, simply paste the following into your Tasmota
 Berry Script Console:
@@ -92,9 +93,6 @@ Berry Script Console:
 
 You should see output like `{'restart': {'Restart': 'Restarting'}, 'download': 200}` and the device will restart.
 
-With older Tasmota versions, download the [`.tapp` file](https://link.frontmatter.ai/haco/tapp) on a desktop computer,
-upload it to your device as `haco.tapp` and restart manually.
-
 Once the device restarts, you should see the following among your Tasmota startup logs (in the regular console, not the
 Berry one):
 
@@ -102,13 +100,19 @@ Berry one):
 HACO: The haco daemon has started. Hostname: tasmota-test, MAC: 04:74:77:9B:CB:CC. Listening for configuration...
 ```
 
+#### Older Tasmota Versions
+
+With older Tasmota versions, download the [`haco.tapp` file](https://link.frontmatter.ai/haco/tapp) on a desktop
+computer,
+upload it to your device and restart manually.
+
 ### Home Assistant
 
 You can now install the Home Assistant Add-On:
 
 [![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://link.frontmatter.ai/haco/add-on)
 
-Once the Add-On is installed, click into its Configuration tab, you'll see a setting called `assignments`:
+Once the Add-On is installed, click into its Configuration tab and you'll see a setting called `assignments`:
 
 ```yaml
 - config: null
@@ -132,8 +136,11 @@ Saving the Configuration will restart the Add-On. After the restart, you should 
 Device "Tasmota Test Device" successfully configured. Hostname: tasmota-test MAC: 04:74:77:9B:CB:CC.
 ```
 
-In Home Assistant, find the device in the Devices section. You should now see a test Select (pulldown) control called "
-Greeter".
+In Home Assistant, find the device in [the Devices section](https://my.home-assistant.io/redirect/devices/). You should
+now see a test Select (pulldown) control called "Greeter".
+
+<img alt="WebLog Select" height=50% src="assets/greeter_select.png" width=50%/>
+
 Selecting the greetings from the pulldown, you should see them appear in your Tasmota Berry console, e.g.
 
 ```console
@@ -177,7 +184,7 @@ more `Control` objects. Each control definition involves two things:
 #### Location
 
 User-Defined modules should be added to the `/config/haco` directory in Home Assistant, with a `.py` extension,
-e.g. `my_config.py`.
+e.g. `/config/haco/my_config.py`.
 
 #### Defining controls
 
@@ -205,35 +212,38 @@ Let's break this control definition down into the control object, the callback d
 ###### The control object
 
 First we initialise a `Sensor` control object, assign it to a variable called `memory`, give it a relevant icon, unit of
-measure and device class.
+measure and type.
 
 ###### The callback decorator
 
-Next, we add a callback object to that control. Here we call the function `tasmota` to tell `haco` that this callback is
-for handling values _from_ Tasmota. As for _what_
-values to return from Tasmota, this is specified by the `trigger` argument to the decorator `memory.callback`. The
-trigger itself, `Tele#Heap`, fires
-whenever telemetry data is returned from Tasmota and, specifically, returns the `Heap` field, which contains the free
-memory in
-kilobytes.
+The callback decorator `@memory.callback(trigger='Tele#Heap')` specifies a Tasmota trigger, the values from which will
+be sent to the callback function.
+This specific trigger, `Tele#Heap`, fires whenever telemetry data is returned from Tasmota and, specifically, returns
+the `Heap` field, which contains the free
+memory in kilobytes.
 
 :warning: Tasmota callbacks _must_ have such a `trigger` specified in this decorator.
 
+<img alt="Memory Sensor" height=50% src="assets/memory_sensor.png" width=50%/>
+
+
 ###### The callback
 
-Note that the callback function is named `tasmota`. This is important as the name tells `haco` that this callback
+Note that the callback function is named `tasmota`. This name is important as it tells `haco` that this callback
 handles values _from_ Tasmota.
+
 The response from the trigger we specified in our callback decorator above gets fed into our callback as the `value`
 argument. The (optional) type annotation for the `value` argument (the `int`) tells `haco` what data type to expect from
 Tasmota, and type conversion gets done automatically.
+
 The return value from the function is what will be returned to Home Assistant as the value for the sensor.
 
 :information_source: Note that our callback function does not actually _do_ anything with our `value` other than return
-it. But if we wanted to (for example)
-convert the value from kilobytes to bytes, this is where we'd do it, with `return value*1000`.
+it. But if we wanted to (for example) convert the value from kilobytes to bytes, this is where we'd do it,
+with `return value*1000`.
 
-:information_source: You can find the list of available UOMs [here](blob/release/haco/data/uom.py) and
-types [here](blob/main/haco/data/type_sensor.py).
+:information_source: You can find the list of available units of measure [here](../../blob/release/haco/data/uom.py) and
+types [here](../../blob/main/haco/data/type_sensor.py).
 
 #### Home Assistant-Only Controls
 
@@ -266,19 +276,20 @@ two arguments, `Tasmota[<type>,<berry_expression>]`. The
 first argument is the type returned by the callback function, as per usual, and which again lets `haco` convert the
 return value accordingly.
 
-But the second argument is an expression that defines how to _apply_ the change on the Tasmota side. In this case, this
+The second argument is an expression that defines _what to do_ on the Tasmota side when the button is pressed. In this
+case, this
 is just a Berry expression to restart Tasmota.
 
 :warning: Note that Home Assistant callbacks _must_ have such a `Tasmota` type annotation for their return type.
 
 :information_source: In the example above, the `value` argument received and returned by our callback is not actually
-used on the Berry
-side. Home Assistant just sends a constant string (`PRESS`) when the button is pressed, so the actual content of
+used by the Berry expression side. Home Assistant just sends a constant string (`PRESS`) when the button is pressed, so
+the actual content of
 the `value` argument is not important.
 
 #### Two-Way Controls
 
-Two-Way controls need to handle values from _both_ Home Assistant and from Tasmota, and hence need both the callbacks
+Two-way controls need to handle values from _both_ Home Assistant and from Tasmota, and hence need both the callbacks
 types - `ha` and `tasmota`  we've seen above.
 
 Here is an example two-way `Select` (pulldown menu) object. It allows setting the Tasmota `WebLog` console debugging
@@ -317,27 +328,28 @@ the `WebLog` command is used on the Tasmota side.
 When you first assign a new configuration to a device, keep an eye on the Add-On logs for any errors. You'll see a
 typical Python stack trace if anything goes wrong.
 
-:information_source: Each time you edit your configuration module (`.py` file), you'll need to restart the Add-On. Hot
+:warning: Each time you edit your configuration module (`.py` file), you'll need to restart the Add-On. Hot
 is reloading not yet supported.
 
 #### Additional Capabilities
 
-More complex device controls (e.g. `Climate`, `Fan`) have additional capabilities beyond a single value sent to/from
-Home Assistant. Adding callbacks for these extended capabilities is done similarly to the above, only the callbacks need
+More complex device controls (e.g. `Climate`, `Fan`) have additional capabilities beyond a single value requiting
+Tasmota/Home Assistant
+callbacks. Adding callbacks for these extended capabilities is done similarly to the above, only the callbacks need
 to include the name of the capability. So if you want to add callbacks around setting the `target_humidity` of
 a `Climate` control, you'd need to call your callbacks `target_humidity_tasmota` and `target_humidity_ha`, etc.
 
 A full schema of these names will appear in subsequent documentation. But you can find example implementations for most
-controls in the [built-in `development` config](blob/release/haco/configs/development.py).
+controls in the [built-in `development` config](../../blob/release/haco/configs/development.py).
 
 Anway, if you get the names wrong, you'll see an error like this in your Add-On logs:
 
 ```
-ValueError: Callback function "set_mode_ha" name is not valid for control "Climate". Must be one of: ['action_tasmota', 'current_humidity_tasmota', 'current_temperature_tasmota', 'mode_ha', 'mode_tasmota', 'preset_mode_ha', 'preset_mode_tasmota', 'swing_mode_ha', 'swing_mode_tasmota', 'target_humidity_ha', 'target_humidity_tasmota', 'target_temperature_ha', 'target_temperature_tasmota', 'temperature_high_ha', 'temperature_high_tasmota', 'temperature_low_ha', 'temperature_low_tasmota']
+ValueError: Callback function name "set_mode_ha" is not valid for control "Climate". Must be one of: ['action_tasmota', 'current_humidity_tasmota', 'current_temperature_tasmota', 'mode_ha', 'mode_tasmota', 'preset_mode_ha', 'preset_mode_tasmota', 'swing_mode_ha', 'swing_mode_tasmota', 'target_humidity_ha', 'target_humidity_tasmota', 'target_temperature_ha', 'target_temperature_tasmota', 'temperature_high_ha', 'temperature_high_tasmota', 'temperature_low_ha', 'temperature_low_tasmota']
 ```
 
 #### Additional Resources
 
 Beyond these examples, when creating your own configuration, you'll probably find
-the [built-in configurations](tree/release/haco/configs) (
-especially the [`development` config](blob/release/haco/configs/development.py)) useful.
+the [built-in configurations](../../tree/release/haco/configs) (especially
+the [`development` config](../../blob/release/haco/configs/development.py)) useful.

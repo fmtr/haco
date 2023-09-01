@@ -54,7 +54,7 @@ class Control:
         callback_names = self.schema.get_callback_function_names()
 
         if function_name not in callback_names:
-            msg = f'Callback function "{function_name}" name is not valid for control "{self.__class__.__name__}". Must be one of: {sorted(callback_names)}'
+            msg = f'Callback function name "{function_name}" is not valid for control "{self.__class__.__name__}". Must be one of: {sorted(callback_names)}'
             raise ValueError(msg)
 
         capability_id, platform_id = function_name.rsplit('_', 1)
