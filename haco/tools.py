@@ -1,10 +1,13 @@
 import hashlib
 import logging
+import os
 
 from haco import constants, tuya
 from haco.tasmota import Tasmota
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)-8s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+LOG_LEVEL = os.environ.get('HACO_LOG_LEVEL', 'INFO')
+
+logging.basicConfig(level=LOG_LEVEL, format='%(asctime)s %(levelname)-8s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger(__name__)
 
 
