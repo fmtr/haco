@@ -6,7 +6,7 @@ from haco.tasmota import Tasmota
 
 
 def get_memory_sensor():
-    memory_sensor = Sensor('Memory Free', uom='kB', device_class='DATA_SIZE', data_type=int)
+    memory_sensor = Sensor('Memory Free', uom='kB', uom_type='DATA_SIZE', data_type=int)
 
     @memory_sensor.callback(trigger.Cron('*/30 * * * * *'))
     def tasmota(value: Tasmota[Any, 'tasmota.memory()']):

@@ -8,7 +8,7 @@ from haco.data.uom import Uom
 class Sensor(Control):
     NAME = 'sensor'
 
-    DEVICE_CLASS = DeviceClassSensor
+    UOM_TYPE = DeviceClassSensor
     UOM = Uom
 
     @classmethod
@@ -23,9 +23,9 @@ class Sensor(Control):
             ]
         )
 
-    def __init__(self, name, data_type=None, uom=None, icon=None, device_class=None):
+    def __init__(self, name, data_type=None, uom=None, icon=None, uom_type=None):
         self.data_type = data_type
-        self.device_class = device_class
+        self.device_class = uom_type
         self.uom = uom
 
         super().__init__(name, icon=icon)

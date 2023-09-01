@@ -20,6 +20,6 @@ def ha(value) -> Tasmota[str, set_greeting]:
     return value
 
 
-@greeter.callback(trigger='Var16#state')
-def tasmota(value: str):
+@greeter.callback(trigger='WebLog')
+def tasmota(value: int):
     return value

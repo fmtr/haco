@@ -21,8 +21,9 @@ def tasmota(value: int):
 time_remaining = Sensor(
     name='Time Remaining',
     uom=Sensor.UOM.TIME_MINUTES,
+    uom_type=Sensor.UOM_TYPE.DURATION,
     icon='timer',
-    device_class=Sensor.DEVICE_CLASS.DURATION
+
 )
 
 
@@ -112,7 +113,7 @@ add_tuya_io(delay_time, int, 2, 6)
 status = Sensor(
     name='Status',
     icon='playlist-play',
-    device_class=Sensor.DEVICE_CLASS.ENUM
+    uom_type=Sensor.UOM_TYPE.ENUM
 )
 
 
