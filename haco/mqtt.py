@@ -1,18 +1,13 @@
 import aiomqtt
 import asyncio
 import json
-import os
 from pathlib import Path
 
 from haco import constants, tools
+from haco.constants import MQTT_PASSWORD, MQTT_HOST, MQTT_PORT, MQTT_USERNAME
 from haco.device import Device
 from haco.load_configs import load_devices
 from haco.tools import log_received
-
-MQTT_PASSWORD = os.environ['MQTT_PASSWORD']
-MQTT_HOST = os.environ['MQTT_HOST']
-MQTT_PORT = int(os.environ['MQTT_PORT'])
-MQTT_USERNAME = os.environ['MQTT_USERNAME']
 
 
 async def listen(client, devices):
