@@ -207,6 +207,8 @@ def tasmota(value: int):
 
 ```
 
+<img alt="Memory Sensor" height=50% src="assets/memory_sensor.png" width=50%/>
+
 Let's break this control definition down into the control object, the callback decorator, and the callback itself.
 
 ###### The control object
@@ -223,9 +225,6 @@ the `Heap` field, which contains the free
 memory in kilobytes.
 
 :warning: Tasmota callbacks _must_ have such a `trigger` specified in this decorator.
-
-<img alt="Memory Sensor" height=50% src="assets/memory_sensor.png" width=50%/>
-
 
 ###### The callback
 
