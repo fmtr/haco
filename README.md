@@ -54,7 +54,8 @@ Blueprints, Helpers and Templates (on the Home Assistant side).
 
 You can see how much work creating such guides involves by seeing how it
 was [heroically undertaken by Blakadder](https://blakadder.com/proscenic-in-home-assistant/), as
-compared with the [full `haco`-based equivalent](/configs/proscenic_t21.py).
+compared with
+the [full `haco`-based equivalent](https://github.com/fmtr/haco/blob/release/haco/configs/proscenic_t21.py).
 
 With `haco`, on the other hand, the thorny parts of the initial setup are abstracted away and your final configuration
 can often be shared via a single script. Below is a list of some of the tasks that `haco`
@@ -165,7 +166,8 @@ Whichever type you use, assigning them to a device is done as we saw above.
 ### Built-In Modules
 
 `haco` ships with a small number of built-in configurations. These can be found in
-the [configs directory](tree/release/haco/configs) in this repo. But in the likely event that your device hasn't already
+the [configs directory](https://github.com/fmtr/haco/blob/release/haco/configs) in this repo. But in the likely event
+that your device hasn't already
 been added, you'll need to define your own.
 
 :information_source: The aim is to expand the number of built-in configurations over time. So if you define your own (
