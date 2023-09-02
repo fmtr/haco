@@ -22,4 +22,4 @@ services:
   - mqtt:need
 slug: haco
 url: https://link.frontmatter.ai/haco
-version: 0.0.13
+version: 0.0.14
