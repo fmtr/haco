@@ -36,7 +36,7 @@ async def listen(client, devices):
                         break
 
                 if not device:
-                    msg = f'Got announce from device with no config: Hostname: {data_announce["hostname"]} MAC:{data_announce["mac"]}. Publishing config data.'
+                    msg = f"""Found device with no configuration module assigned. Assign one in Add-On Configuration: "{data_announce["device_name"]}" Hostname: {data_announce["hostname"]} {data_announce["hostname"]} MAC:{data_announce["mac"]}."""
                     tools.logger.info(msg)
                     continue
 

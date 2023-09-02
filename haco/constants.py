@@ -3,7 +3,7 @@ import string
 from pathlib import Path
 
 CHARS_ALLOWED = string.ascii_lowercase + string.digits
-SEPS_ALLOWED = '_- '
+SEPS = '_- /'
 BRANCH = 'release'
 
 CONFIGS_PATH = Path(os.environ['HACO_CONFIGS_PATH'])

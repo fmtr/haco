@@ -65,7 +65,7 @@ def sanitize_name(s, sep='-'):
     chars = []
 
     for c in s.lower():
-        if c in constants.SEPS_ALLOWED:
+        if c in constants.SEPS:
             chars.append(sep)
         elif c in constants.CHARS_ALLOWED:
             chars.append(c)
