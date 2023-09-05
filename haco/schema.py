@@ -4,7 +4,7 @@ import typing
 from pathlib import Path
 from typing import List
 
-from haco import tools, constants
+from haco import tools, constants, callback
 
 DEVICE = 'development-eth'
 CONTROL = 'DEVELOPMENT-DEHUMIDIFIER'
@@ -108,10 +108,15 @@ class Platform:
         payload_str = message.payload.decode('utf-8')
         payload = self.deserialize(payload_str)
 
-        output_raw = self.get_callback_output(payload)
+        response = self.get_callback_output(payload)
 
-        output = self.serialize(self.convert_out(output_raw))
+        if type(response) is not callback.Response:
+            response = callback.Response(value=response)
 
+        if not response.send:
+            return 'DO_NOT_SEND'
+
+        output = self.serialize(self.convert_out(response.value))
         return output
 
     def get_callback_output(self, data):

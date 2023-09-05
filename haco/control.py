@@ -101,6 +101,12 @@ class Control:
 
         platform = self.schema.get(capability_id).get(platform_id)
         output = platform.handle(message)
+
+        if output == 'DO_NOT_SEND':
+            logging.warning(
+                f'Topic {message.topic.value} callback responded with send=False. Will not publish response.')
+            return
+
         topic = str(platform.get_topic_publish())
         await log_publish(client, topic, output)
 

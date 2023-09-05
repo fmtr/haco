@@ -107,3 +107,9 @@ class Callback:
         if self.platform == schema.Tasmota.PLATFORM:
             if not self.trigger:
                 raise ValueError(f'Callback "{self.function_name}" must have a trigger.')
+
+
+class Response:
+    def __init__(self, value=None, send=True):
+        self.value = value
+        self.send = send

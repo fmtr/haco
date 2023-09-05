@@ -99,3 +99,20 @@ def hash_string(input_string, size=16):
     hash_result = hash_object.hexdigest()[:size]
 
     return hash_result
+
+
+def get_latest(org, repo):
+    import requests
+    url = f"https://api.github.com/repos/{org}/{repo}/releases/latest"
+
+    headers = {
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+    }
+
+    response = requests.request("GET", url, headers=headers)
+    response_json = response.json()
+
+    tag = response_json.get('tag_name')
+
+    return tag
