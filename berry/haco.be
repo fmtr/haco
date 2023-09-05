@@ -263,7 +263,7 @@ class Daemon
         if self.config_id==nil
             var rule_control=tools.callbacks.MqttSubscription(
                 self.TOPIC_CONTROL,
-                /value,data->self.handle_control_message(value,data)
+                /value,data->tasmota.set_timer(0,/->self.handle_control_message(value,data))
             )
             self.registry_daemon.add(rule_control)
         end
@@ -312,11 +312,10 @@ class Daemon
             function=tools.compile.evaluate(data['function'])
         else
             logger.error(string.format('Using default function for %s',trigger))
-            function=/value data->{'value':value,'data':data}
+            function=/value,data->{'value':value,'data':data}
         end
 
-    
-        return callback_type(trigger,/value data->self.publish_output(function,value,data,topic))
+        return callback_type(trigger,/value,data->tasmota.set_timer(0,/->self.publish_output(function,value,data,topic)))
     
     end
 

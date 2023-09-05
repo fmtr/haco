@@ -5,6 +5,8 @@ def autoexec(metadata)
 
     haco.daemon=haco.Daemon()
 
+    #haco.daemon.registry_daemon.remove_all()
+
 end
 
 var mod = module("haco_autoexec")
