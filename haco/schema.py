@@ -240,7 +240,7 @@ class Tasmota(Platform):
         extra_args = set(data.keys()) - set(sigs.keys())
 
         for arg in extra_args:
-            msg = f'Callback {self.callback.function_name} got argument ({arg}={extra_args[arg]}) not in callback function. Will be ignored.'
+            msg = f'Callback {self.callback.function_name} got argument ({arg}={data[arg]}) not in callback function. Will be ignored.'
             logging.warning(msg)
             data.pop(arg)
 
