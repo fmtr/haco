@@ -5,6 +5,7 @@ from .pulldown import Select
 from .sensor import Sensor
 from .switch import Switch
 from .tasmota import Tasmota
+from .update import Update
 
 __all__ = [
     "Button",
@@ -13,5 +14,6 @@ __all__ = [
     "Tasmota",
     "Number",
     "Switch",
+    "Update",
     "tuya"
 ]
