@@ -1,6 +1,7 @@
 import math
 
 from haco import Tasmota, Number, Sensor, Select, Switch, tuya
+from haco.debugging import get_tasmota_updater
 from haco.tools import add_tuya_io
 
 OPTIONS = ['Default', 'Fries', 'Shrimp', 'Pizza', 'Chicken', 'Fish', 'Steak', 'Cake', 'Bacon', 'Preheat', 'Custom']
@@ -129,5 +130,7 @@ keep_warm_time = Number(
 )
 
 add_tuya_io(keep_warm_time, int, 2, 105)
+
+update = get_tasmota_updater()
 
 DEVICE_CONFIG = {'run_config_post': f'def () return tasmota.cmd("TuyaSend0") end'}

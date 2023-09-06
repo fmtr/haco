@@ -80,6 +80,15 @@ class Platform:
         self.callback = None
 
     @property
+    def callback_id(self):
+        return (
+                Path() /
+                self.capability.schema.control.NAME /
+                self.capability.schema.control.name_sanitized /
+                self.capability.name
+        )
+
+    @property
     def callback_function_name(self):
         return f'{self.capability.alias}_{self.PLATFORM}'
 
@@ -220,7 +229,8 @@ class HomeAssistant(Platform):
             'topic': None,
             'trigger': str(trigger),
             'function': self.callback.function_tasmota,
-            'type': 'MqttSubscription'
+            'type': 'MqttSubscription',
+            'id': str(self.callback_id)
         }
 
         return config
@@ -290,7 +300,8 @@ class Tasmota(Platform):
             'topic': str(self.get_topic_subscription()),
             'trigger': self.callback.trigger,
             'function': self.callback.function_tasmota,
-            'type': self.callback.type_id
+            'type': self.callback.type_id,
+            'id': str(self.callback_id)
         }
 
         return config

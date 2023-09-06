@@ -304,6 +304,7 @@ class Daemon
         var callback_type=CALLBACK_MAP[data.find('type', classname(tools.callbacks.Rule))]
         var topic=data['topic']
         var trigger=data['trigger']
+        var id=data['id']
     
         var function
     
@@ -315,7 +316,11 @@ class Daemon
             function=/value,data->{'value':value,'data':data}
         end
 
-        return callback_type(trigger,/value,data->tasmota.set_timer(0,/->self.publish_output(function,value,data,topic)))
+        return callback_type(
+            trigger,
+            /value,data->tasmota.set_timer(0,/->self.publish_output(function,value,data,topic)),
+            id
+        )
     
     end
 

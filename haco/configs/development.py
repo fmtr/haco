@@ -1,9 +1,5 @@
-from haco.climate import Climate
-from haco.number import Number
-from haco.pulldown import Select
-from haco.sensor import Sensor
-from haco.tasmota import Tasmota
-from haco.text import Text, Password
+from haco import Number, Tasmota, Select, Sensor, Text, Password, Climate
+
 
 number = Number(
     'Dev Number Test Control',
@@ -169,3 +165,8 @@ def ha(value: str) -> Tasmota[str, 'tasmota.cmd("var14 "+str(value))']:
 @password.callback('var14#state')
 def tasmota(value: str):
     return value
+
+
+from haco.debugging import get_tasmota_updater
+
+update = get_tasmota_updater()

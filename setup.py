@@ -24,7 +24,8 @@ setup(
     },
     install_requires=[
         'aiomqtt',
-        'pyyaml'
+        'pyyaml',
+        'requests'
     ],
     extras_require={
         'tasmota': [
