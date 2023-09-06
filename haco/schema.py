@@ -313,13 +313,20 @@ class Default:
 
 class Capability:
 
-    def __init__(self, name, type=ControlType, tamota: Tasmota = Default, ha: HomeAssistant = Default, alias=None):
+    def __init__(
+            self,
+            name: str = constants.CAPABILITY_DEFAULT,
+            type=ControlType,
+            tasmota: typing.Optional[Tasmota] = Default,
+            ha: typing.Optional[HomeAssistant] = Default,
+            alias: typing.Optional[str] = None
+    ):
         self.name = name
         self.alias = alias or name
         self.type = type
         self.schema = None
 
-        self.tasmota = tamota if tamota is not Default else Tasmota()
+        self.tasmota = tasmota if tasmota is not Default else Tasmota()
         self.ha = ha if ha is not Default else HomeAssistant()
         self.platforms = [io for io in {self.tasmota, self.ha} if io]
 

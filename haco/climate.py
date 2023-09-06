@@ -41,18 +41,18 @@ class Climate(Control):
                 Capability(
                     name='current_humidity',
                     ha=None,
-                    tamota=Tasmota(announce_data=AnnounceTopic(key='{capability}_topic'))
+                    tasmota=Tasmota(announce_data=AnnounceTopic(key='{capability}_topic'))
                 ),
                 Capability(
                     name='current_temperature',
                     ha=None,
-                    tamota=Tasmota(announce_data=AnnounceTopic(key='{capability}_topic'))
+                    tasmota=Tasmota(announce_data=AnnounceTopic(key='{capability}_topic'))
                 ),
                 Capability(
                     name='action',
                     type=str,
                     ha=None,
-                    tamota=Tasmota(announce_data=AnnounceTopic(key='{capability}_topic'))
+                    tasmota=Tasmota(announce_data=AnnounceTopic(key='{capability}_topic'))
                 )
             ]
         )

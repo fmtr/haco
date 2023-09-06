@@ -6,7 +6,7 @@ CHARS_ALLOWED = string.ascii_lowercase + string.digits
 SEPS = '_- /'
 BRANCH = 'release'
 
-DEFAULT = 'default'
+CAPABILITY_DEFAULT = 'default'
 
 CONFIGS_PATH = Path(os.environ['HACO_CONFIGS_PATH'])
 OPTIONS_PATH = Path(os.environ['HACO_OPTIONS_PATH'])

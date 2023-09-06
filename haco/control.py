@@ -17,9 +17,8 @@ class Control:
         schema = Schema(
             capabilities=[
                 Capability(
-                    name=constants.DEFAULT,
                     ha=HomeAssistant(announce_data=AnnounceTopic(key='{io_ha}_topic')),
-                    tamota=Tasmota(announce_data=AnnounceTopic(key='{io_ha}_topic'))
+                    tasmota=Tasmota(announce_data=AnnounceTopic(key='{io_ha}_topic'))
                 )
             ]
         )
@@ -49,7 +48,7 @@ class Control:
     def add_callback(self, trigger, function):
 
         if (function_name := function.__name__) in {Tasmota.PLATFORM, HomeAssistant.PLATFORM}:
-            function_name = f'{constants.DEFAULT}_{function_name}'
+            function_name = f'{constants.CAPABILITY_DEFAULT}_{function_name}'
 
         callback_names = self.schema.get_callback_function_names()
 
