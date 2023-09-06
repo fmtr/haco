@@ -6,6 +6,8 @@ CHARS_ALLOWED = string.ascii_lowercase + string.digits
 SEPS = '_- /'
 BRANCH = 'release'
 
+DEFAULT = 'default'
+
 CONFIGS_PATH = Path(os.environ['HACO_CONFIGS_PATH'])
 OPTIONS_PATH = Path(os.environ['HACO_OPTIONS_PATH'])
 MQTT_PASSWORD = os.environ['MQTT_PASSWORD']

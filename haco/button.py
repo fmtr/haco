@@ -1,4 +1,4 @@
-from haco import schema
+from haco import schema, constants
 from haco.control import Control
 
 
@@ -10,7 +10,7 @@ class Button(Control):
         return schema.Schema(
             capabilities=[
                 schema.Capability(
-                    name='state',
+                    name=constants.DEFAULT,
                     ha=schema.HomeAssistant(announce_data=schema.AnnounceTopic(key='{io_ha}_topic')),
                     tamota=None
                 )

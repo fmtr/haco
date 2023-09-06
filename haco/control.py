@@ -1,7 +1,7 @@
 import logging
 from functools import partial
 
-from haco import schema, tools
+from haco import schema, tools, constants
 from haco.callback import Callback
 from haco.schema import Schema, Platform, Tasmota, HomeAssistant, AnnounceTopic, Capability
 from haco.tools import log_publish
@@ -17,7 +17,7 @@ class Control:
         schema = Schema(
             capabilities=[
                 Capability(
-                    name='state',
+                    name=constants.DEFAULT,
                     ha=HomeAssistant(announce_data=AnnounceTopic(key='{io_ha}_topic')),
                     tamota=Tasmota(announce_data=AnnounceTopic(key='{io_ha}_topic'))
                 )
@@ -49,7 +49,7 @@ class Control:
     def add_callback(self, trigger, function):
 
         if (function_name := function.__name__) in {Tasmota.PLATFORM, HomeAssistant.PLATFORM}:
-            function_name = f'state_{function_name}'
+            function_name = f'{constants.DEFAULT}_{function_name}'
 
         callback_names = self.schema.get_callback_function_names()
 

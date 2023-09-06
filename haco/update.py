@@ -1,3 +1,4 @@
+from haco import constants
 from haco.control import Control
 from haco.schema import Schema, Capability, AnnounceTopic, Tasmota, HomeAssistant
 
@@ -10,7 +11,7 @@ class Update(Control):
         schema = Schema(
             capabilities=[
                 Capability(
-                    name='state',
+                    name=constants.DEFAULT,
                     ha=HomeAssistant(announce_data=AnnounceTopic(key='{io_ha}_topic')),
                     tamota=Tasmota(announce_data=AnnounceTopic(key='{io_ha}_topic'))
                 ),
