@@ -2,6 +2,7 @@ from haco import tuya
 from .button import Button
 from .callback import Response
 from .climate import Climate
+from .fan import Fan
 from .number import Number
 from .pulldown import Select
 from .sensor import Sensor
@@ -21,6 +22,7 @@ __all__ = [
     "Password",
     "Update",
     "Climate",
+    "Fan",
     "Response",
     "tuya"
 ]
