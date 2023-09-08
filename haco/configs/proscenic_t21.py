@@ -37,6 +37,7 @@ cooking_time = Number(
     name='Cooking Time',
     number_range=range(1, 60),
     uom=Number.UOM.TIME_MINUTES,
+    mode='box',
     icon='timer'
 )
 
@@ -106,6 +107,7 @@ delay_time = Number(
     name='Delay Time',
     number_range=range(0, 720),
     uom=Sensor.UOM.TIME_MINUTES,
+    mode='box',
     icon='timer-pause'
 )
 
@@ -126,7 +128,8 @@ keep_warm_time = Number(
     name='Keep Warm Time',
     number_range=range(0, 120),
     uom=Sensor.UOM.TIME_MINUTES,
-    icon='timer-sync'
+    icon='timer-sync',
+    mode='box',
 )
 
 add_tuya_io(keep_warm_time, int, 2, 105)
