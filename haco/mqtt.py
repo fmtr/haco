@@ -7,7 +7,7 @@ from haco import constants, tools
 from haco.constants import MQTT_PASSWORD, MQTT_HOST, MQTT_PORT, MQTT_USERNAME
 from haco.device import Device
 from haco.load_configs import load_devices
-from haco.tools import log_received
+from haco.tools import log_received, logger
 
 
 async def listen(client, devices):
@@ -59,6 +59,13 @@ async def start_mqtt():
     devices = load_devices()
     devices = {device.identifier: device for device in devices}
 
-    async with aiomqtt.Client(hostname=MQTT_HOST, port=MQTT_PORT, username=MQTT_USERNAME,
-                              password=MQTT_PASSWORD) as client:
-        await asyncio.gather(listen(client, devices))
+    while True:
+        client = aiomqtt.Client(hostname=MQTT_HOST, port=MQTT_PORT, username=MQTT_USERNAME,
+                                password=MQTT_PASSWORD)
+        try:
+            async with client:
+                await asyncio.gather(listen(client, devices))
+        except aiomqtt.MqttError:
+            msg = f"MQTT: Connection lost; Reconnecting in {constants.RECONNECT_DELAY_SEC} seconds ..."
+            logger.info(msg)
+            await asyncio.sleep(constants.RECONNECT_DELAY_SEC)

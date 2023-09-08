@@ -1,7 +1,8 @@
 import logging
 from functools import partial
 
-from haco import schema, tools, constants
+import haco.constants
+from haco import tools, constants
 from haco.callback import Callback
 from haco.schema import Schema, Platform, Tasmota, HomeAssistant, AnnounceTopic, Capability
 from haco.tools import log_publish
@@ -72,9 +73,9 @@ class Control:
             "unique_id": f"{self.device.name_sanitized}-{self.device.mac_short}-{self.name_sanitized}",
             "name": self.name,
             "availability_topic": f"tele/{self.device.topic}/LWT",
-            "payload_off": schema.OFF,
+            "payload_off": haco.constants.OFF,
             "payload_available": "Online",
-            "payload_on": schema.ON,
+            "payload_on": haco.constants.ON,
             "payload_not_available": "Offline",
             "force_update": True,
             "icon": self.icon,

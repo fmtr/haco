@@ -9,9 +9,6 @@ from haco import tools, constants, callback
 DEVICE = 'development-eth'
 CONTROL = 'DEVELOPMENT-DEHUMIDIFIER'
 
-ON = 'ON'
-OFF = 'OFF'
-
 
 class ControlType:
     ...

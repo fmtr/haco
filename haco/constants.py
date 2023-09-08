@@ -7,6 +7,9 @@ SEPS = '_- /'
 BRANCH = 'release'
 
 CAPABILITY_DEFAULT = 'default'
+RECONNECT_DELAY_SEC = 5
+ON = 'ON'
+OFF = 'OFF'
 
 CONFIGS_PATH = Path(os.environ['HACO_CONFIGS_PATH'])
 OPTIONS_PATH = Path(os.environ['HACO_OPTIONS_PATH'])
