@@ -26,3 +26,7 @@ patches:
         path: haco_version.be
         pattern: \bvar\s+VERSION\s*=\s*'{version}'
 
+code_mask: |
+  import tools
+  downloader=tools.web.Downloader('{url}',nil,/->print(tasmota.cmd('restart 1')))
+

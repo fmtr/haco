@@ -72,7 +72,7 @@ class Control:
         data = {
             "unique_id": f"{self.device.name_sanitized}-{self.device.mac_short}-{self.name_sanitized}",
             "name": self.name,
-            "availability_topic": f"tele/{self.device.topic}/LWT",
+            "availability_topic": str(self.device.data_announce.topic_lwt_prop),
             "payload_off": haco.constants.OFF,
             "payload_available": "Online",
             "payload_on": haco.constants.ON,

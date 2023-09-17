@@ -230,6 +230,8 @@ class Daemon
             'timestamp': tasmota.rtc(),
             'config_id': self.config_id,
             'topic': tools.mqtt.get_topic(),
+            'prefix': tasmota.cmd('Prefix'),
+            'fulltopic': tasmota.cmd('FullTopic')['FullTopic'],
             'device_name': tools.platform.get_device_name(),
         }
     end

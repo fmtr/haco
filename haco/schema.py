@@ -378,7 +378,8 @@ class Schema:
         return names
 
     def get_path(self):
-        return Path(f"haco") / constants.BRANCH / self.control.device.hostname / 'control' / self.control.name_sanitized
+        return Path(
+            f"haco") / constants.BRANCH / self.control.device.data_announce.hostname / 'control' / self.control.name_sanitized
 
     def get_config_ha(self):
         data = {}

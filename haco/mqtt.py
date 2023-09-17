@@ -6,13 +6,14 @@ from pathlib import Path
 from haco import constants, tools
 from haco.constants import MQTT_PASSWORD, MQTT_HOST, MQTT_PORT, MQTT_USERNAME
 from haco.device import Device
+from haco.device_data import DeviceInfo
 from haco.load_configs import load_devices
 from haco.tools import log_received, logger
 
 
 async def listen(client, devices):
     TOPIC_ANNOUNCE = f"haco/{constants.BRANCH}/+/announce"
-    await client.subscribe(TOPIC_ANNOUNCE)
+    await tools.log_subscribe(client, TOPIC_ANNOUNCE)
 
     async with client.messages() as messages:
 
@@ -26,11 +27,9 @@ async def listen(client, devices):
                     continue
 
                 data_announce = json.loads(message.payload)
+                data_announce = DeviceInfo(**data_announce)
 
-                identifiers = {data_announce['wifi'].get('mac'), data_announce['eth'].get('mac'),
-                               data_announce['hostname'], data_announce['mac']}
-
-                for identifier in identifiers:
+                for identifier in data_announce.identifiers:
                     device: Device = devices.get(identifier)
                     if device:
                         break
@@ -40,16 +39,21 @@ async def listen(client, devices):
                     tools.logger.info(msg)
                     continue
 
-                if device.config_id and data_announce['config_id'] == device.config_id:
-                    msg = f'Device "{device.name}" successfully configured. Hostname: {device.hostname} MAC:{device.mac}'
+                if device.data_announce and data_announce.config_id == device.data_announce.config_id:
+                    msg = f'Device "{device.data_announce.name}" successfully configured. Hostname: {device.data_announce.hostname} MAC:{device.data_announce.mac}'
                     tools.logger.info(msg)
                     continue
 
                 await device.bind(client, data_announce)
-                devices[device.hostname] = device
+                devices[device.data_announce.hostname] = device
 
 
             else:
+
+                if message.topic.matches('haco/release/+/config/#'):
+                    logger.error(f'Control code got config message. Do not know why.')
+                    continue
+
                 _, _, device_name, _, control, capability_id, platform, io = Path(message.topic.value).parts
                 device = devices[device_name]
                 await device.get(control).process_message(client, capability_id, platform, message)
