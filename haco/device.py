@@ -4,7 +4,7 @@ from typing import List
 
 from haco import tools, constants
 from haco.control import Control
-from haco.device_data import DeviceInfo
+from haco.device_data import DeviceData
 from haco.tools import log_publish, split_into_chunks, log_subscribe
 
 
@@ -105,7 +105,7 @@ class Device:
         for topic in data.keys():
             await log_subscribe(client, str(topic))
 
-    async def bind(self, client, data_announce: DeviceInfo):
+    async def bind(self, client, data_announce: DeviceData):
         msg = f'Found device with matching config {self.config_module.__name__}: Hostname: {data_announce.hostname} MAC:{data_announce.mac}'
         tools.logger.info(msg)
 

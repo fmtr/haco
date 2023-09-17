@@ -6,7 +6,7 @@ from pathlib import Path
 from haco import constants, tools
 from haco.constants import MQTT_PASSWORD, MQTT_HOST, MQTT_PORT, MQTT_USERNAME
 from haco.device import Device
-from haco.device_data import DeviceInfo
+from haco.device_data import DeviceData
 from haco.load_configs import load_devices
 from haco.tools import log_received, logger
 
@@ -27,7 +27,7 @@ async def listen(client, devices):
                     continue
 
                 data_announce = json.loads(message.payload)
-                data_announce = DeviceInfo(**data_announce)
+                data_announce = DeviceData(**data_announce)
 
                 for identifier in data_announce.identifiers:
                     device: Device = devices.get(identifier)

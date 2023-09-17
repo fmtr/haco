@@ -4,7 +4,7 @@ from typing import Dict
 
 
 @dataclass
-class DeviceInfo:
+class DeviceData:
     wifi: Dict[str, any]
     device_name: str
     fulltopic: str
