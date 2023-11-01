@@ -1,4 +1,4 @@
-var VERSION='0.0.19'
+var VERSION='0.0.20'
 
 var mod = module("haco_version")
 mod.VERSION=VERSION
