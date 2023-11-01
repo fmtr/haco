@@ -16,6 +16,6 @@ RUN if [ -z "$VERSION" ] ; then pip3 install haco ; else pip3 install haco==${VE
 
 FROM ${TYPE} as image
 
-CMD haco
+CMD haco-daemon
 
 

@@ -11,12 +11,12 @@ RECONNECT_DELAY_SEC = 5
 ON = 'ON'
 OFF = 'OFF'
 
-CONFIGS_PATH = Path(os.environ['HACO_CONFIGS_PATH'])
-OPTIONS_PATH = Path(os.environ['HACO_OPTIONS_PATH'])
-MQTT_PASSWORD = os.environ['MQTT_PASSWORD']
-MQTT_HOST = os.environ['MQTT_HOST']
-MQTT_PORT = int(os.environ['MQTT_PORT'])
-MQTT_USERNAME = os.environ['MQTT_USERNAME']
+CONFIGS_PATH = Path(os.environ.get('HACO_CONFIGS_PATH','/haco/config'))
+OPTIONS_PATH = Path(os.environ.get('HACO_OPTIONS_PATH','/haco/data/options.json'))
+MQTT_HOST = os.environ.get('MQTT_HOST','localhost')
+MQTT_PORT = int(os.environ.get('MQTT_PORT',1883))
+MQTT_USERNAME = os.environ.get('MQTT_USERNAME')
+MQTT_PASSWORD = os.environ.get('MQTT_PASSWORD',None)
 
 if (CONFIGS_PATH / '.debug').exists():
     LOG_LEVEL = 'DEBUG'
