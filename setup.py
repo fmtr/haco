@@ -13,7 +13,7 @@ setup(
     long_description_content_type='text/markdown',
     name=name,
     version=__version__,
-    url=f'https://link.frontmatter.ai/{name}',
+    url=f'https://fmtr.link/{name}',
     license='Copyright © 2023 Frontmatter. All rights reserved.',
     author='Frontmatter',
     description='Home Assistant Control Objects',

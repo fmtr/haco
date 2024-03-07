@@ -89,7 +89,7 @@ Once your test device is ready, with a recent (12.5+) version of Tasmota, simply
 Berry Script Console:
 
 ```be
-{"download":tasmota.urlfetch('https://link.frontmatter.ai/haco/tapp','haco.tapp'), "restart":tasmota.cmd("restart 1")}
+{"download":tasmota.urlfetch('https://fmtr.link/haco/tapp','haco.tapp'), "restart":tasmota.cmd("restart 1")}
 ```
 
 You should see output like `{'restart': {'Restart': 'Restarting'}, 'download': 200}` and the device will restart.
@@ -103,7 +103,7 @@ HACO: The haco daemon has started. Hostname: tasmota-test, MAC: 04:74:77:9B:CB:C
 
 #### Older Tasmota Versions
 
-With older Tasmota versions, download the [`haco.tapp` file](https://link.frontmatter.ai/haco/tapp) on a desktop
+With older Tasmota versions, download the [`haco.tapp` file](https://fmtr.link/haco/tapp) on a desktop
 computer,
 upload it to your device and restart manually.
 
@@ -111,7 +111,7 @@ upload it to your device and restart manually.
 
 You can now install the Home Assistant Add-On:
 
-[![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://link.frontmatter.ai/haco/add-on)
+[![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://fmtr.link/haco/add-on)
 
 Once the Add-On is installed, click into its Configuration tab and you'll see a setting called `assignments`:
 

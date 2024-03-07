@@ -21,5 +21,5 @@ schema:
 services:
   - mqtt:need
 slug: haco
-url: https://link.frontmatter.ai/haco
+url: https://fmtr.link/haco
 version: 0.0.20

@@ -1,1 +1,1 @@
-For the latest changes, see **[the project releases page](https://link.frontmatter.ai/haco/changes)**.
+For the latest changes, see **[the project releases page](https://fmtr.link/haco/changes)**.
