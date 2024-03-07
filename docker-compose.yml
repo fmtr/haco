@@ -1,0 +1,13 @@
+version: '3.4'
+services:
+  haco-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    image: haco:dev
+    container_name: haco
+    env_file:
+      - ${ENV_PATH}
+    volumes:
+      - /fm/haco/artifacts:/haco
