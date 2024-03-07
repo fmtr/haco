@@ -17,7 +17,7 @@ jobs:
       NAME: ${{ github.event.repository.name }}
       NAME_SHORT: ${{ github.event.repository.name }}
       ORG: ${{ github.repository_owner }}
-      REBRANDLY_API_KEY: ${{ secrets.REBRANDLY_API_KEY }}
+      SHLINK_API_KEY: ${{ secrets.SHLINK_API_KEY }}
       LINK_ID: haco/tapp
 
     steps:
