@@ -1,7 +1,7 @@
 ARG VERSION
 ARG TYPE=development
 
-FROM edwardbrown/python as base
+FROM fmtr/python as base
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt -qq update -y
 
