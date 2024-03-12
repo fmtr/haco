@@ -23,7 +23,7 @@ setup(
         name: [f'version'],
     },
     install_requires=[
-        'aiomqtt',
+        'aiomqtt<2',
         'pyyaml',
         'requests'
     ],
