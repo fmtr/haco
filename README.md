@@ -354,3 +354,36 @@ ValueError: Callback function name "set_mode_ha" is not valid for control "Clima
 Beyond these examples, when creating your own configuration, you'll probably find
 the [built-in configurations](https://github.com/fmtr/haco/tree/release/haco/configs) (especially
 the [`development` config](https://github.com/fmtr/haco/tree/release/haco/configs/development.py)) useful.
+
+## How to Run Using Docker
+
+If you're not using Home Assistant OS (Supervised) you might want to run as a stand-alone Docker Container. There's no pre-built image currently, so you'll need to build and run manually:
+
+## Build
+
+```bash
+git clone https://github.com/fmtr/haco.git
+cd haco
+docker build -t fmtr/haco:latest .
+```
+
+## Run
+
+Example Docker Compose:
+
+```yaml
+version: '3'
+services:
+  main:
+    image: fmtr/haco:latest
+    container_name: haco
+    restart: unless-stopped
+
+    environment:
+      - MQTT_HOST=mqtt.service
+      - HACO_LOG_LEVEL=DEBUG
+    volumes:
+      - <local_dir>:/haco
+```
+
+
