@@ -386,4 +386,11 @@ services:
       - <local_dir>:/haco
 ```
 
+Other environment variables:
+
+- `MQTT_HOST`
+- `MQTT_PORT`
+- `MQTT_USERNAME`
+- `MQTT_PASSWORD`
+
 
