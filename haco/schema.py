@@ -133,7 +133,7 @@ class Platform:
         if not self.callback:
             return {}
 
-        return {self.get_topic_subscription(): self.get_handler_name()}
+        return {self.get_topic_subscription(): self.get_handler_name()}  # I think this is as such because it needs to invert the subscription. so one platform gets the other's messages?
 
     def get_config_ha(self):
 
