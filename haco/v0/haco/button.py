@@ -1,5 +1,6 @@
-from haco import schema
 from haco.control import Control
+
+from haco import schema
 
 
 class Button(Control):

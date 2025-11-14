@@ -1,10 +1,11 @@
 import random
 from typing import Any
 
-from haco import trigger, Update, Response
 from haco.sensor import Sensor
 from haco.tasmota import Tasmota
 from haco.tools import get_latest
+
+from haco import trigger, Update, Response
 
 
 def get_memory_sensor():

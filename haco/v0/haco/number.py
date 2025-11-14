@@ -1,7 +1,7 @@
 from haco.control import Control
-from haco.data.uom import Uom
-
 from haco.tools import get_range_pair
+
+from haco.data.uom import Uom
 
 
 class Number(Control):
