@@ -22,7 +22,7 @@ class Climate(Control):
                 ),
                 Capability(
                     name='temperature',
-                    alias='target_temperature'
+                    alias='target_temperature'  # only used for callbacks, i guess to unify/simplify them for the user.
                 ),
                 Capability(
                     name='temperature_high'
