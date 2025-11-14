@@ -1,11 +1,11 @@
-from collections import namedtuple
-
 import inspect
 import typing
+from collections import namedtuple
 from typing import _AnnotatedAlias
 
-from haco import berry, schema
 from haco.trigger import Trigger, Rule
+
+from haco import berry, schema
 
 Signature = namedtuple('Signature', ['type', 'expression'])
 

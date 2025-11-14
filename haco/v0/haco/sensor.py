@@ -1,7 +1,7 @@
-from haco import schema
 from haco.control import Control
-from haco.data.type_sensor import DeviceClassSensor
 
+from haco import schema
+from haco.data.type_sensor import DeviceClassSensor
 from haco.data.uom import Uom
 
 

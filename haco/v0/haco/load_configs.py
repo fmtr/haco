@@ -1,13 +1,13 @@
-from importlib import reload
-
 import importlib.util
 import json
+from importlib import reload
 from pathlib import Path
 
-from haco import tools
 from haco.constants import CONFIGS_PATH, OPTIONS_PATH
 from haco.control import Control
 from haco.device import Device
+
+from haco import tools
 
 
 def load_json(file_path):

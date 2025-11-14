@@ -1,7 +1,8 @@
-from haco import constants
 from haco.control import Control
 from haco.schema import Schema, Capability, AnnounceTopic, Tasmota, ControlType, HomeAssistant
 from haco.tools import get_range_pair, invert_bool
+
+from haco import constants
 
 
 class Fan(Control):

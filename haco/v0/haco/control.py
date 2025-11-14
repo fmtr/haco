@@ -2,10 +2,11 @@ import logging
 from functools import partial
 
 import haco.constants
-from haco import tools, constants
 from haco.callback import Callback
 from haco.schema import Schema, Platform, Tasmota, HomeAssistant, AnnounceTopic, Capability
 from haco.tools import log_publish
+
+from haco import tools, constants
 
 
 class Control:

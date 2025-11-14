@@ -2,10 +2,11 @@ import json
 from pathlib import Path
 from typing import List
 
-from haco import tools, constants
 from haco.control import Control
 from haco.device_data import DeviceData
 from haco.tools import log_publish, split_into_chunks, log_subscribe
+
+from haco import tools, constants
 
 
 class Device:
