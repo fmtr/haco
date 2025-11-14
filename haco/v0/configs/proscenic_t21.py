@@ -1,8 +1,8 @@
 import math
-
-from haco import Tasmota, Number, Sensor, Select, Switch, tuya
 from haco.debugging import get_tasmota_updater
 from haco.tools import add_tuya_io
+
+from haco import Tasmota, Number, Sensor, Select, Switch, tuya
 
 OPTIONS = ['Default', 'Fries', 'Shrimp', 'Pizza', 'Chicken', 'Fish', 'Steak', 'Cake', 'Bacon', 'Preheat', 'Custom']
 
