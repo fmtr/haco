@@ -13,7 +13,6 @@ if TYPE_CHECKING:
 
 from haco.utils import sanitize_name
 
-
 class Control(dm.Base):
     name: str
     platform: str
@@ -34,8 +33,15 @@ class Control(dm.Base):
     @computed_field
     @property
     def unique_id(self) -> str:
-        name_san = sanitize_name(self.name)
-        return f"{self.device.name_san}-{name_san}"
+        return f"{self.device.name_san}-{self.name_san}"
+
+    @property
+    def name_san(self) -> str:
+        return sanitize_name(self.name)
+
+    @property
+    def topic(self):
+        return self.device.topic / self.name_sanitized
 
     @property
     def announce_topic(self):
@@ -44,7 +50,7 @@ class Control(dm.Base):
     @computed_field
     @property
     def availability_topic(self) -> str:
-        return self.device.availability_topic
+        return self.device.client.will.topic
 
     @property
     def announce(self) -> dict:

@@ -5,10 +5,13 @@ from typing import ClassVar, TYPE_CHECKING
 
 from pydantic import PrivateAttr
 
-from fmtr.tools import dm
+from fmtr.tools import dm, env, Path
+from haco.paths import paths
 
 if TYPE_CHECKING:
     from haco.capabilities import Capability
+
+TOPIC_ROOT = Path(paths.name) / env.CHANNEL
 
 
 class AnnounceTopic(dm.Base):
@@ -32,7 +35,7 @@ class AnnounceTopic(dm.Base):
     @property
     def fills(self):
         return dict(
-            path=str(self.capability.control.device.name_san),
+            path=str(self.capability.control.topic),
             capability=self.capability.name,
             io=self.IO
         )
