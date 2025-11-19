@@ -1,9 +1,11 @@
-from typing import Literal, Optional, List
+from dataclasses import dataclass
+from typing import List, Optional, Literal
 
-from haco.capabilities import Capability
-from haco.control import Control
+from capabilities import Capability
+from control import Control
 
 
+@dataclass(kw_only=True)
 class Climate(Control):
     platform: Literal["climate"] = "climate"
     temperature_unit: Literal["C", "F"] = "C"
@@ -21,7 +23,7 @@ class Climate(Control):
         return value
 
     @classmethod
-    def get_capabilities(self):
+    def get_capabilities(cls):
         return [
             Capability(name="current_temperature", command=None),
             Capability(name="temperature"),

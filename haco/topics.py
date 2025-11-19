@@ -1,33 +1,25 @@
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from functools import cached_property
 from typing import ClassVar, TYPE_CHECKING
 
-from pydantic import PrivateAttr
-
-from fmtr.tools import dm, env, Path
-from haco.paths import paths
-
 if TYPE_CHECKING:
-    from haco.capabilities import Capability
-
-TOPIC_ROOT = Path(paths.name) / env.CHANNEL
+    from capabilities import Capability
 
 
-class AnnounceTopic(dm.Base):
+@dataclass(kw_only=True)
+class AnnounceTopic:
     IO: ClassVar[str | None] = None
     key: str = '{capability}_{io}_topic'
     value: str = '{path}/{capability}/{io}'
 
-    _capability: Capability = PrivateAttr(default=None)
+    parent: Capability | None = None
+    announce: dict | None = field(default=None, metadata=dict(exclude=True))
 
-    @property
-    def capability(self) -> Capability:  # todo. quite ugly. perhaps just use @dataclass for topics?
-        return self._capability
-
-    @capability.setter
-    def capability(self, value: Capability):
-        self._capability = value
+    def set_parent(self, control):
+        self.parent = control
+        self.announce = self.get_announce()
 
     def fill(self, mask):
         return mask.format(**self.fills)
@@ -48,31 +40,38 @@ class AnnounceTopic(dm.Base):
     def topic(self):
         return self.fill(self.value)
 
-    @property
-    def announce(self):
-        data = {self.topic_key: self.topic}
-        return data
+    def get_announce(self):
+        return {self.topic_key: self.topic}
 
     @property
     def callback_name(self):
         return f'{self.capability.name}_{self.IO}'
 
+    @property
+    def subscriptions(self):
+        return {}
 
+    @cached_property
+    def capability(self):
+        return self.parent
+
+
+@dataclass(kw_only=True)
 class AnnounceTopicState(AnnounceTopic):
-    IO = 'state'
+    IO: ClassVar[str] = 'state'
 
     @property
     def subscriptions(self):
         return {}
 
 
+@dataclass(kw_only=True)
 class AnnounceTopicCommand(AnnounceTopic):
-    IO = 'command'
+    IO: ClassVar[str] = 'command'
 
     @property
     def subscriptions(self):
         method = getattr(self.capability.control, self.callback_name, None)
         if not method:
             return {}
-
         return {self.topic: method}
