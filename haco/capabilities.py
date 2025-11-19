@@ -1,39 +1,36 @@
-from typing import Optional
+from __future__ import annotations
 
-from pydantic import Field, model_validator
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
 
-from fmtr.tools import dm
-from fmtr.tools.iterator_tools import strip_none
-from haco.control import Control
+from haco.base import Base
 from haco.topics import AnnounceTopicState, AnnounceTopicCommand
 
+if TYPE_CHECKING:
+    from haco.control import Control
 
-class Capability(dm.Base):
+
+@dataclass(kw_only=True)
+class Capability(Base):
     name: str
-    alias: str = None
 
-    state: AnnounceTopicState | None = Field(default_factory=AnnounceTopicState)
-    command: AnnounceTopicCommand | None = Field(default_factory=AnnounceTopicCommand)
+    state: AnnounceTopicState | None = field(default_factory=AnnounceTopicState)
+    command: AnnounceTopicCommand | None = field(default_factory=AnnounceTopicCommand)
+    parent: Control | None = None
+    announce = None
 
-    control: Optional[Control] = Field(None, exclude=True, repr=False)
+    def set_parent(self, control):
+        self.parent = control
+        for topic in (t for t in (self.state, self.command) if t):
+            topic.set_parent(self)
+        self.announce = self.get_announce()
 
-    @property
-    def announce(self) -> dict:
+    def get_announce(self) -> dict:
         data = {}
-        for topic in strip_none(self.state, self.command):
+        for topic in (t for t in (self.state, self.command) if t):
             data |= topic.announce
         return data
 
     @property
-    def subscriptions(self):
-
-        if not self.command:
-            return {}
-
-        return self.command.subscriptions
-
-    @model_validator(mode="after")
-    def attach_parent(self):
-        for topic in strip_none(self.state, self.command):
-            topic.capability = self
-        return self
+    def control(self):
+        return self.parent

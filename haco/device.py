@@ -1,26 +1,38 @@
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from functools import cached_property
-from typing import List
+from typing import List, TYPE_CHECKING
 
-from pydantic import Field, computed_field, model_validator
+from pydantic import computed_field
 
-from fmtr.tools import dm
-from haco import constants
+from haco.base import Base
 from haco.control import Control
 from haco.utils import sanitize_name
 
+if TYPE_CHECKING:
+    from haco.client import ClientHaco
 
-class Device(dm.Base):
+
+@dataclass(kw_only=True)
+class Device(Base):
     name: str
     manufacturer: str = "Demo"
     model: str = "Python MQTT Example"
 
-    controls: List[Control] = Field(default_factory=list, exclude=True, repr=False)
+    controls: List[Control] = field(default_factory=list, metadata=dict(exclude=True))
+    parent: ClientHaco | None = field(metadata=dict(exclude=True))
+    announce: dict | None = field(default=None, metadata=dict(exclude=True))
+
+    def set_parent(self, client):
+        self.parent = client
+        for control in self.controls:
+            control.set_parent(self)
+        self.announce = self.get_announce()
 
     @cached_property
     def topic(self):
-        return constants.TOPIC_CLIENT / self.name_san
+        return self.client.topic / self.name_san
 
     @property
     def name_san(self) -> str:
@@ -37,19 +49,15 @@ class Device(dm.Base):
     def connections(self) -> list[list[str]]:
         return [["mac", "AA:BB:CC:DD:EE:FF"]]
 
-    @model_validator(mode="after")
-    def attach_parent(self):
-        for control in self.controls:
-            control.device = self
-        return self
-
-    @cached_property
-    def announce(self) -> dict:
+    def get_announce(self):
         data = {}
-        for capability in self.capabilities:
+        for capability in self.controls:
             data |= capability.announce
-
         return data
+
+    @property
+    def client(self):
+        return self.parent
 
     @cached_property
     def subscriptions(self) -> dict:

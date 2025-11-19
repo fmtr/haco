@@ -3,10 +3,7 @@ import json
 
 import aiomqtt
 
-MQTT_HOST = "mqtt.service"
-MQTT_PORT = 1883
-MQTT_USERNAME = "user"
-MQTT_PASSWORD = None
+from haco.constants import MQTT_HOST, MQTT_PORT, MQTT_USERNAME, MQTT_PASSWORD
 
 DEVICE_ID = "haco_sandbox"
 ENTITY_ID = "demo_switch"

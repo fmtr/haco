@@ -1,4 +1,5 @@
 import string
+from dataclasses import dataclass
 
 CHARS_ALLOWED = string.ascii_lowercase + string.digits
 SEPS = '_- /'
@@ -25,3 +26,8 @@ def sanitize_name(s, sep='-'):
         raise ValueError("Sanitized string is empty")
 
     return sanitized
+
+
+@dataclass
+class Metadata:
+    exclude: bool = False

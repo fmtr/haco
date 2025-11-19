@@ -1,36 +1,52 @@
 from __future__ import annotations
 
-from functools import cached_property
-from typing import Optional, TYPE_CHECKING
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
 
-from pydantic import computed_field, model_validator, PrivateAttr
-
-from fmtr.tools import dm
-
-if TYPE_CHECKING:
-    from haco.capabilities import Capability
-    from haco.device import Device
-
+from haco.base import Base
+from haco.capabilities import Capability
 from haco.utils import sanitize_name
 
-class Control(dm.Base):
+if TYPE_CHECKING:
+    from haco.device import Device
+
+
+@dataclass(kw_only=True)
+class Control(Base):
     name: str
     platform: str
 
-    icon: Optional[str] = None
+    device: Device = field(default=None)
+    capabilities: None | list[Capability] = field(default=None, metadata=dict(exclude=True))
+    announce: dict | None = field(default=None, metadata=dict(exclude=True))
 
-    _device: Device = PrivateAttr(default=None)
+    def __post_init__(self):
+        self.caps = self.get_capabilities()
 
-    @computed_field
+    def set_parent(self, device):
+        self.device = device
+        for cap in self.caps:
+            cap.set_parent(self)
+        self.announce = self.get_announce()
+
+
+
     @property
-    def device(self) -> Device:  # todo. quite ugly. perhaps just use @dataclass for topics?
-        return self._device
+    def parent(self):
+        return self.device
 
-    @device.setter
-    def device(self, value: Device):
-        self._device = value
+    def get_announce(self):
+        data = self.model_dump()
+        for cap in self.caps:
+            data |= cap.announce
 
-    @computed_field
+        data = {self.announce_topic: data}
+        return data
+
+    @classmethod
+    def get_capabilities(cls):
+        raise NotImplementedError()
+
     @property
     def unique_id(self) -> str:
         return f"{self.device.name_san}-{self.name_san}"
@@ -41,26 +57,15 @@ class Control(dm.Base):
 
     @property
     def topic(self):
-        return self.device.topic / self.name_sanitized
+        return self.device.topic / self.name_san
 
     @property
     def announce_topic(self):
         return f"homeassistant/{self.platform}/{self.unique_id}/config"
 
-    @computed_field
     @property
     def availability_topic(self) -> str:
         return self.device.client.will.topic
-
-    @property
-    def announce(self) -> dict:
-
-        data = self.model_dump(mode="json", exclude_none=True)
-        for capability in self.capabilities:
-            data |= capability.announce
-
-        data = {self.announce_topic: data}
-        return data
 
     @property
     def subscriptions(self) -> dict:
@@ -71,18 +76,3 @@ class Control(dm.Base):
             data |= capability.subscriptions
 
         return data
-
-    @model_validator(mode="after")
-    def attach_parent(self):
-        self.capabilities = self.get_capabilities()
-        for capability in self.capabilities:
-            capability.control = self
-        return self
-
-    @classmethod
-    def get_capabilities(cls):
-        raise NotImplementedError()
-
-    @cached_property
-    def capabilities(self) -> list[Capability]:
-        return self.get_capabilities()
