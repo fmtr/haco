@@ -1,6 +1,7 @@
-from haco.control import Control
-
+import haco.capabilities
+import haco.topics
 from haco import schema
+from haco.control import Control
 
 
 class Button(Control):
@@ -10,8 +11,8 @@ class Button(Control):
     def get_schema(cls):
         return schema.Schema(
             capabilities=[
-                schema.Capability(
-                    ha=schema.HomeAssistant(announce_data=schema.AnnounceTopic(key='{io_ha}_topic')),
+                haco.capabilities.Capability(
+                    ha=schema.HomeAssistant(announce_data=haco.topics.AnnounceTopic(key='{io_ha}_topic')),
                     tasmota=None
                 )
             ]

@@ -2,11 +2,12 @@ import json
 from pathlib import Path
 from typing import List
 
-from haco.control import Control
 from haco.device_data import DeviceData
 from haco.tools import log_publish, split_into_chunks, log_subscribe
 
+import haco.utils
 from haco import tools, constants
+from haco.control import Control
 
 
 class Device:
@@ -29,7 +30,7 @@ class Device:
 
     @property
     def name_sanitized(self):
-        return tools.sanitize_name(self.data_announce.name)
+        return haco.utils.sanitize_name(self.data_announce.name)
 
     @property
     def mac_short(self):

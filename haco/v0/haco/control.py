@@ -1,11 +1,12 @@
 import logging
 from functools import partial
 
-import haco.constants
 from haco.callback import Callback
 from haco.schema import Schema, Platform, Tasmota, HomeAssistant, AnnounceTopic, Capability
 from haco.tools import log_publish
 
+import haco.constants
+import haco.utils
 from haco import tools, constants
 
 
@@ -42,7 +43,7 @@ class Control:
 
     @property
     def name_sanitized(self):
-        return tools.sanitize_name(self.name)
+        return haco.utils.sanitize_name(self.name)
 
     def callback(self, trigger=None):
         return partial(self.add_callback, trigger)

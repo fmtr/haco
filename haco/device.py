@@ -6,6 +6,7 @@ from typing import List
 from pydantic import Field, computed_field, model_validator
 
 from fmtr.tools import dm
+from haco import constants
 from haco.control import Control
 from haco.utils import sanitize_name
 
@@ -17,13 +18,14 @@ class Device(dm.Base):
 
     controls: List[Control] = Field(default_factory=list, exclude=True, repr=False)
 
+    @cached_property
+    def topic(self):
+        return constants.TOPIC_CLIENT / self.name_san
+
     @property
     def name_san(self) -> str:
         return sanitize_name(self.name)
 
-    @property
-    def availability_topic(self) -> str:
-        return f'status/{self.name_san}/availability'
 
     @computed_field
     @property
@@ -42,8 +44,12 @@ class Device(dm.Base):
         return self
 
     @cached_property
-    def announces(self) -> list[dict]:
-        return [control.announce for control in self.controls]
+    def announce(self) -> dict:
+        data = {}
+        for capability in self.capabilities:
+            data |= capability.announce
+
+        return data
 
     @cached_property
     def subscriptions(self) -> dict:

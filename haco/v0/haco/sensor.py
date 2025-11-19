@@ -1,8 +1,10 @@
-from haco.control import Control
-
-from haco import schema
 from haco.data.type_sensor import DeviceClassSensor
 from haco.data.uom import Uom
+
+import haco.capabilities
+import haco.topics
+from haco import schema
+from haco.control import Control
 
 
 class Sensor(Control):
@@ -15,9 +17,9 @@ class Sensor(Control):
     def get_schema(cls):
         return schema.Schema(
             capabilities=[
-                schema.Capability(
+                haco.capabilities.Capability(
                     ha=None,
-                    tasmota=schema.Tasmota(announce_data=schema.AnnounceTopic(key='{io_ha}_topic'))
+                    tasmota=schema.Tasmota(announce_data=haco.topics.AnnounceTopic(key='{io_ha}_topic'))
                 )
             ]
         )

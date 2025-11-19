@@ -62,21 +62,7 @@ def invert_bool(value):
     return {True: 'ON', False: 'OFF', 'ON': True, 'OFF': False}[value]
 
 
-def sanitize_name(s, sep='-'):
-    chars = []
 
-    for c in s.lower():
-        if c in constants.SEPS:
-            chars.append(sep)
-        elif c in constants.CHARS_ALLOWED:
-            chars.append(c)
-
-    sanitized = ''.join(chars)
-
-    if not sanitized:
-        raise ValueError("Sanitized string is empty")
-
-    return sanitized
 
 
 def add_tuya_io(control, control_type, type_id, dp_id):
