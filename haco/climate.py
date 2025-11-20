@@ -22,6 +22,21 @@ class Climate(Control):
     def temperature_command(self, value):
         return value
 
+    def mode_command(self, value):
+        return value
+
+    def fan_mode_command(self, value):
+        return value
+
+    def fan_mode_state(self, value):
+        return value
+
+    def power_command(self, value):
+        return value
+
+    def power_state(self, value):
+        return value
+
     @classmethod
     def get_capabilities(cls):
         return [
@@ -31,4 +46,5 @@ class Climate(Control):
             Capability(name="target_humidity"),
             Capability(name="mode"),
             Capability(name="fan_mode"),
+            Capability(name="power"),
         ]

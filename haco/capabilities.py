@@ -16,6 +16,8 @@ class Capability(Base):
 
     state: AnnounceTopicState | None = field(default_factory=AnnounceTopicState)
     command: AnnounceTopicCommand | None = field(default_factory=AnnounceTopicCommand)
+    subscriptions: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
+
     parent: Control | None = None
     announce = None
 
@@ -23,6 +25,9 @@ class Capability(Base):
         self.parent = control
         for topic in (t for t in (self.state, self.command) if t):
             topic.set_parent(self)
+
+        self.subscriptions = self.get_subscriptions()
+
         self.announce = self.get_announce()
 
     def get_announce(self) -> dict:
@@ -34,3 +39,9 @@ class Capability(Base):
     @property
     def control(self):
         return self.parent
+
+    def get_subscriptions(self) -> dict:
+        data = {}
+        for topic in (t for t in (self.state, self.command) if t):
+            data |= topic.subscriptions
+        return data
