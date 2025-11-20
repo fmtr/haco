@@ -1,20 +1,16 @@
 from haco.client import ClientHaco
-from haco.climate import Climate
 from haco.constants import MQTT_HOST
+from haco.control import Control
 from haco.device import Device
+
+control = Control(name="test", platform="test")
+device = Device(name="test", parent=None, controls=[control])
 
 client = ClientHaco(
 
     hostname=MQTT_HOST,
 
-    device=Device(
-        parent=None,
-        name='dev-device',
-        controls=[
-            Climate(name='Dev Climate A', platform='climate'),
-            Climate(name='Dev Climate B', platform='climate'),
-        ]
-    )
+    device=device
 )
 
 client
