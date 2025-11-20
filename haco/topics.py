@@ -16,10 +16,12 @@ class AnnounceTopic:
 
     parent: Capability | None = None
     announce: dict | None = field(default=None, metadata=dict(exclude=True))
+    subscriptions: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
 
-    def set_parent(self, control):
-        self.parent = control
+    def set_parent(self, capability: Capability):
+        self.parent = capability
         self.announce = self.get_announce()
+        self.subscriptions = self.get_subscriptions()
 
     def fill(self, mask):
         return mask.format(**self.fills)
@@ -47,8 +49,7 @@ class AnnounceTopic:
     def callback_name(self):
         return f'{self.capability.name}_{self.IO}'
 
-    @property
-    def subscriptions(self):
+    def get_subscriptions(self):
         return {}
 
     @cached_property
@@ -60,18 +61,27 @@ class AnnounceTopic:
 class AnnounceTopicState(AnnounceTopic):
     IO: ClassVar[str] = 'state'
 
-    @property
-    def subscriptions(self):
+    def get_subscriptions(self):
         return {}
 
+    async def wrap_back(self, value):
+        method = getattr(self.capability.control, self.callback_name, None)
+        value_raw = method(value)
+        await self.capability.control.device.client.publish(self.topic, value_raw)
+        return value_raw
 
 @dataclass(kw_only=True)
 class AnnounceTopicCommand(AnnounceTopic):
     IO: ClassVar[str] = 'command'
 
     @property
-    def subscriptions(self):
+    def state(self):
+        return self.capability.state
+
+    def wrap_back(self, message):
         method = getattr(self.capability.control, self.callback_name, None)
-        if not method:
-            return {}
-        return {self.topic: method}
+        value = method(message.payload.decode('utf-8'))
+        return value
+
+    def get_subscriptions(self):
+        return {self.topic: self}

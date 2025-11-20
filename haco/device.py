@@ -21,11 +21,11 @@ class Device(Base):
     identifiers: list[str] | None = field(default=None, init=False)
 
     controls: List[Control] = field(default_factory=list, metadata=dict(exclude=True))
-    parent: ClientHaco | None = field(metadata=dict(exclude=True))
-    announce: dict | None = field(default=None, metadata=dict(exclude=True))
 
-    # def __post_init__(self):
-    #     self.identifiers=['ident']
+    parent: ClientHaco | None = field(metadata=dict(exclude=True), init=False)
+    announce: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
+    subscriptions: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
+
 
     def set_parent(self, client):
         self.parent = client
@@ -35,6 +35,7 @@ class Device(Base):
         for control in self.controls:
             control.set_parent(self)
         self.announce = self.get_announce()
+        self.subscriptions = self.get_subscriptions()
 
         self
 
@@ -57,8 +58,7 @@ class Device(Base):
     def client(self):
         return self.parent
 
-    @cached_property
-    def subscriptions(self) -> dict:
+    def get_subscriptions(self) -> dict:
         data = {}
         for control in self.controls:
             data |= control.subscriptions

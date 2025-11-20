@@ -16,17 +16,29 @@ class Control(Base):
     name: str
     platform: str
 
-    device: Device = field(default=None)
+    device: Device = field(default=None, init=False)
     capabilities: None | list[Capability] = field(default=None, metadata=dict(exclude=True))
+    unique_id: str | None = field(default=None, init=False)
+    availability_topic: str | None = field(default=None, init=False)
+
     announce: dict | None = field(default=None, metadata=dict(exclude=True))
+    subscriptions: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
 
     def __post_init__(self):
         self.capabilities = self.get_capabilities()
 
     def set_parent(self, device):
         self.device = device
+
         for cap in self.capabilities:
             cap.set_parent(self)
+
+        self.unique_id = self.get_unique_id()
+        self.availability_topic = self.get_availability_topic()
+        self.subscriptions = self.get_subscriptions()
+
+
+
         self.announce = self.get_announce()
 
 
@@ -49,9 +61,7 @@ class Control(Base):
             Capability(name='default')
         ]
 
-
-    @property
-    def unique_id(self) -> str:
+    def get_unique_id(self) -> str:
         return f"{self.device.name_san}-{self.name_san}"
 
     @property
@@ -66,12 +76,10 @@ class Control(Base):
     def announce_topic(self):
         return f"homeassistant/{self.platform}/{self.unique_id}/config"
 
-    @property
-    def availability_topic(self) -> str:
+    def get_availability_topic(self) -> str:
         return self.device.client.will.topic
 
-    @property
-    def subscriptions(self) -> dict:
+    def get_subscriptions(self) -> dict:
 
         data = {}
 
