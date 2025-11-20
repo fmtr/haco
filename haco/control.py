@@ -21,11 +21,11 @@ class Control(Base):
     announce: dict | None = field(default=None, metadata=dict(exclude=True))
 
     def __post_init__(self):
-        self.caps = self.get_capabilities()
+        self.capabilities = self.get_capabilities()
 
     def set_parent(self, device):
         self.device = device
-        for cap in self.caps:
+        for cap in self.capabilities:
             cap.set_parent(self)
         self.announce = self.get_announce()
 
@@ -37,7 +37,7 @@ class Control(Base):
 
     def get_announce(self):
         data = self.model_dump()
-        for cap in self.caps:
+        for cap in self.capabilities:
             data |= cap.announce
 
         data = {self.announce_topic: data}
@@ -45,7 +45,10 @@ class Control(Base):
 
     @classmethod
     def get_capabilities(cls):
-        raise NotImplementedError()
+        return [
+            Capability(name='default')
+        ]
+
 
     @property
     def unique_id(self) -> str:
@@ -76,3 +79,8 @@ class Control(Base):
             data |= capability.subscriptions
 
         return data
+
+
+if __name__ == "__main__":
+    control = Control(name="test", platform="test")
+    control
