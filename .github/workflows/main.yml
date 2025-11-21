@@ -3,7 +3,7 @@ name: Version and Deploy
 on:
   push:
     paths:
-      - 'haco/versionTEMP'
+      - 'haco/version'
   workflow_dispatch:
 
 
