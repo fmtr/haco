@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 @dataclass(kw_only=True)
 class Capability(Base):
-    name: str
+    name: str | None = None
 
     state: AnnounceTopicState | None = field(default_factory=AnnounceTopicState)
     command: AnnounceTopicCommand | None = field(default_factory=AnnounceTopicCommand)

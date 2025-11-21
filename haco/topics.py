@@ -13,7 +13,10 @@ if TYPE_CHECKING:
 @dataclass(kw_only=True)
 class AnnounceTopic:
     IO: ClassVar[str | None] = None
-    key: str = '{capability}_{io}_topic'
+
+    KEY_DEFAULTS: ClassVar[dict] = {True: '{capability}_{io}_topic', False: '{io}_topic'}
+
+    key: str | None = None
     value: str = '{path}/{capability}/{io}'
 
     parent: Capability | None = None
@@ -22,6 +25,8 @@ class AnnounceTopic:
 
     def set_parent(self, capability: Capability):
         self.parent = capability
+        if self.key is None:
+            self.key = self.KEY_DEFAULTS[bool(self.capability.name)]
         self.announce = self.get_announce()
         self.subscriptions = self.get_subscriptions()
 
@@ -32,7 +37,7 @@ class AnnounceTopic:
     def fills(self):
         return dict(
             path=str(self.capability.control.topic),
-            capability=self.capability.name,
+            capability=self.capability.name or 'default',
             io=self.IO
         )
 
@@ -49,6 +54,9 @@ class AnnounceTopic:
 
     @property
     def callback_name(self):
+        if not self.capability.name:
+            return self.IO
+
         return f'{self.capability.name}_{self.IO}'
 
     def get_subscriptions(self):

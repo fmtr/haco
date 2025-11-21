@@ -53,7 +53,7 @@ class Control(Base):
     @classmethod
     def get_capabilities(cls):
         return [
-            Capability(name='default')
+            Capability(name=None)
         ]
 
     def get_unique_id(self) -> str:
