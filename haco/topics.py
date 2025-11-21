@@ -4,6 +4,8 @@ from dataclasses import dataclass, field
 from functools import cached_property
 from typing import ClassVar, TYPE_CHECKING
 
+from haco.obs import logger
+
 if TYPE_CHECKING:
     from capabilities import Capability
 
@@ -66,7 +68,13 @@ class AnnounceTopicState(AnnounceTopic):
 
     async def wrap_back(self, value):
         method = getattr(self.capability.control, self.callback_name, None)
-        value_raw = method(value)
+
+        try:
+            value_raw = method(value)
+        except NotImplementedError:
+            logger.warning(f'No method implemented for {self.topic}')
+            return
+
         await self.capability.control.device.client.publish(self.topic, value_raw)
         return value_raw
 
@@ -80,7 +88,13 @@ class AnnounceTopicCommand(AnnounceTopic):
 
     def wrap_back(self, message):
         method = getattr(self.capability.control, self.callback_name, None)
-        value = method(message.payload.decode('utf-8'))
+
+        try:
+            value = method(message.payload.decode('utf-8'))
+        except NotImplementedError:
+            logger.warning(f'No method implemented for {self.topic}')
+            return
+
         return value
 
     def get_subscriptions(self):

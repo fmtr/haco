@@ -36,12 +36,7 @@ class Control(Base):
         self.unique_id = self.get_unique_id()
         self.availability_topic = self.get_availability_topic()
         self.subscriptions = self.get_subscriptions()
-
-
-
         self.announce = self.get_announce()
-
-
 
     @property
     def parent(self):
@@ -87,6 +82,9 @@ class Control(Base):
             data |= capability.subscriptions
 
         return data
+
+    async def initialise(self):
+        ...
 
 
 if __name__ == "__main__":
