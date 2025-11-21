@@ -16,6 +16,7 @@ jobs:
       NAME: ${{ github.event.repository.name }}
       NAME_SHORT: ${{ github.event.repository.name }}
       ORG: ${{ github.repository_owner }}
+      PATH_VERSION: haco/version
       #SHLINK_API_KEY: ${{ secrets.SHLINK_API_KEY }}
       #LINK_ID: haco/tapp
 
@@ -26,7 +27,7 @@ jobs:
 
       - name: Set Version Environment Variable
         run: |
-          VERSION=$(cat ${PATH_VERSION})
+          VERSION=$(cat ${PATH_VERSION})          
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Install Tools
