@@ -19,23 +19,24 @@ class Climate(Control):
     fan_modes: Optional[List[str]] = None
     swing_modes: Optional[List[str]] = None
 
+
     def temperature_command(self, value):
-        return value
+        raise NotImplementedError()
 
     def mode_command(self, value):
-        return value
+        raise NotImplementedError()
 
     def fan_mode_command(self, value):
-        return value
+        raise NotImplementedError()
 
     def fan_mode_state(self, value):
-        return value
+        raise NotImplementedError()
 
     def power_command(self, value):
-        return value
+        raise NotImplementedError()
 
     def power_state(self, value):
-        return value
+        raise NotImplementedError()
 
     @classmethod
     def get_capabilities(cls):

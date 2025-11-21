@@ -1,8 +1,5 @@
 import asyncio
 
-import aiomqtt
-
-from fmtr.tools.json_tools import to_json
 from haco.client import ClientHaco
 from haco.climate import Climate
 from haco.constants import MQTT_HOST
@@ -16,28 +13,9 @@ async def main():
 
     client = ClientHaco(hostname=MQTT_HOST, device=device)
 
-    client
+    await client.start()
 
-    while True:
-        try:
-            async with client:
 
-                for topic, data in device.announce.items():
-                    data_json = to_json(data)
-                    print(f'Announcing {topic} with {data_json}')
-                    await client.publish(topic, payload=data_json, retain=True)
-
-                # Online now
-                await client.publish(client.will.topic, "online", retain=True)
-
-                await client.publish('haco/development/3012edb1a6d4-1ed9c3469373/dev-device/dev-climate-b/power/command', "OFF", retain=True)
-
-                # Wait for commands
-                await client.handle()
-
-        except aiomqtt.MqttError as e:
-            print(f"⚠️ MQTT disconnected: {e}; retrying in 5s")
-            await asyncio.sleep(5)
 
 
 if __name__ == "__main__":
