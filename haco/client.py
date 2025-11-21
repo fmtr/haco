@@ -9,10 +9,13 @@ from haco.obs import logger
 
 
 class ClientHaco(mqtt.Client):
+    ONLINE = 'online'
+    OFFLINE = 'offline'
+
     aiomqtt.Client
 
     def __init__(self, *args, device=None, will=None, identifier=None, **kwargs):
-        self.will = will or mqtt.Will(topic=str(constants.TOPIC_AVAIL), payload="offline", retain=True, qos=1, )
+        self.will = will or mqtt.Will(topic=str(constants.TOPIC_AVAIL), payload=self.OFFLINE, retain=True, qos=1, )
         identifier = identifier or constants.CLIENT_ID
         self.device = device
         self.device.set_parent(self)
@@ -49,7 +52,7 @@ class ClientHaco(mqtt.Client):
                         logger.info(f'Announcing {topic} with {data_json}')
                         await self.publish(topic, payload=data_json, retain=True)
 
-                    await self.publish(self.will.topic, "online", retain=True)
+                    await self.publish(self.will.topic, self.ONLINE, retain=True)
 
                     # await self.publish('haco/development/3012edb1a6d4-1ed9c3469373/dev-device/dev-climate-b/power/command', "OFF", retain=True)
 
