@@ -1,14 +1,15 @@
-from haco.tools import invert_bool
+from dataclasses import dataclass
+from typing import Literal
 
-from haco.control import Control
+from control import Control
 
 
+@dataclass(kw_only=True)
 class Switch(Control):
-    NAME = 'switch'
+    platform: Literal["climate"] = "switch"
 
-    def __init__(self, name, icon=None):
-        super().__init__(name, icon=icon)
+    def command(self, value):
+        raise NotImplementedError()
 
-    @property
-    def control_type(self):
-        return invert_bool
+    def state(self, value):
+        raise NotImplementedError()

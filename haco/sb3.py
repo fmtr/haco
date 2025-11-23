@@ -5,6 +5,7 @@ from haco.client import ClientHaco
 from haco.climate import Climate
 from haco.constants import MQTT_HOST
 from haco.device import Device
+from haco.switch import Switch
 
 
 async def main():
@@ -12,7 +13,9 @@ async def main():
     climate_b = Climate(name="Dev Climate B", fan_modes=['a', 'b', 'c'])
 
     b1 = Button(name="Dev Button 1")
-    device = Device(name="Dev Device", controls=[climate_a, climate_b, b1])
+
+    s1 = Switch(name="Dev Switch 1")
+    device = Device(name="Dev Device", controls=[climate_a, climate_b, b1, s1])
 
     client = ClientHaco(hostname=MQTT_HOST, device=device)
 
