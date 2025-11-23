@@ -1,12 +1,14 @@
 from dataclasses import dataclass
-from typing import Literal
 
 from control import Control
 
 
 @dataclass(kw_only=True)
 class Switch(Control):
-    platform: Literal["climate"] = "switch"
+    DATA = dict(
+        platform='switch'
+    )
+
 
     def command(self, value):
         raise NotImplementedError()

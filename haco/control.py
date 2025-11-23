@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 @dataclass(kw_only=True)
 class Control(Base):
     name: str
-    platform: str
+
 
     device: Device = field(default=None, init=False)
     capabilities: None | list[Capability] = field(default=None, metadata=dict(exclude=True))
@@ -69,7 +69,7 @@ class Control(Base):
 
     @property
     def announce_topic(self):
-        return f"homeassistant/{self.platform}/{self.unique_id}/config"
+        return f"homeassistant/{self.DATA['platform']}/{self.unique_id}/config"
 
     def get_availability_topic(self) -> str:
         return self.device.client.will.topic

@@ -6,8 +6,10 @@ from typing import Any
 
 @dataclass(kw_only=True)
 class Base:
+    DATA = dict()
+
     def model_dump(self) -> dict[str, Any]:
-        data = {}
+        data = {} | self.DATA
         for fld in fields(self):
             meta = fld.metadata
             if meta.get('exclude', False):

@@ -1,18 +1,18 @@
-from typing import List
+from dataclasses import dataclass
 
-from haco.control import Control
+from control import Control
 
 
+@dataclass(kw_only=True)
 class Select(Control):
-    NAME = 'select'
+    DATA = dict(
+        platform='select'
+    )
 
-    def __init__(self, name, options: List[str], icon=None):
-        self.options = options
-        super().__init__(name, icon=icon)
+    options: list[str]
 
-    def get_config_ha_ex(self):
-        data = {
-            'options': self.options,
-        }
+    def command(self, value):
+        raise NotImplementedError()
 
-        return data
+    def state(self, value):
+        raise NotImplementedError()

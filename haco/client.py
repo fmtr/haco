@@ -1,6 +1,5 @@
-import asyncio
-
 import aiomqtt
+import asyncio
 
 from fmtr.tools import mqtt, Constants
 from fmtr.tools.json_tools import to_json
@@ -40,7 +39,8 @@ class ClientHaco(mqtt.Client):
 
             # Echo back as new state
             topic_state = topic_command.state
-            await topic_state.wrap_back(echo_val)
+            if topic_state:
+                await topic_state.wrap_back(echo_val)
 
     async def start(self):
         while True:

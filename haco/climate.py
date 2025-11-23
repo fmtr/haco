@@ -7,7 +7,11 @@ from control import Control
 
 @dataclass(kw_only=True)
 class Climate(Control):
-    platform: Literal["climate"] = "climate"
+    DATA = dict(
+        platform='climate'
+    )
+
+
     temperature_unit: Literal["C", "F"] = "C"
     temperature_min: float = 0
     temperature_max: float = 40

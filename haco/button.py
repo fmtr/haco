@@ -1,15 +1,20 @@
 from dataclasses import dataclass
-from typing import Literal
 
 from control import Control
+from haco.capabilities import Capability
 
 
 @dataclass(kw_only=True)
 class Button(Control):
-    platform: Literal["climate"] = "button"
+    DATA = dict(
+        platform='button'
+    )
 
     def command(self, value):
         raise NotImplementedError()
 
-    def state(self, value):
-        raise NotImplementedError()
+    @classmethod
+    def get_capabilities(cls):
+        return [
+            Capability(name=None, state=None)
+        ]
