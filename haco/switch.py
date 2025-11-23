@@ -1,6 +1,6 @@
-from haco.control import Control
-
 from haco.tools import invert_bool
+
+from haco.control import Control
 
 
 class Switch(Control):
