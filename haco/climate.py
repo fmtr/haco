@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Optional, Literal
+from typing import Literal
 
 from capabilities import Capability
 from control import Control
@@ -18,10 +18,10 @@ class Climate(Control):
     humidity_min: float = 0
     humidity_max: float = 100
     precision: int = 1
-    modes: Optional[List[str]] = None
-    preset_modes: Optional[List[str]] = None
-    fan_modes: Optional[List[str]] = None
-    swing_modes: Optional[List[str]] = None
+    modes: list[str] | None = None
+    preset_modes: list[str] | None = None
+    fan_modes: list[str] | None = None
+    swing_modes: list[str] | None = None
 
 
     def temperature_command(self, value):

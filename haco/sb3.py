@@ -1,13 +1,17 @@
 import asyncio
+import logging
 
 from haco.button import Button
 from haco.client import ClientHaco
 from haco.climate import Climate
 from haco.constants import MQTT_HOST
 from haco.device import Device
+from haco.obs import logger
 from haco.pulldown import Select
 from haco.switch import Switch
 
+handler = logger.LogfireLoggingHandler()
+logging.basicConfig(handlers=[handler], level=logging.DEBUG)
 
 async def main():
     climate_a = Climate(name="Dev Climate A", fan_modes=['a', 'b', 'c'])
@@ -19,7 +23,7 @@ async def main():
     sel1 = Select(name="Dev Select 1", options=['a', 'b', 'c'])
     device = Device(name="Dev Device", controls=[climate_a, climate_b, b1, s1, sel1])
 
-    client = ClientHaco(hostname=MQTT_HOST, device=device)
+    client = ClientHaco(hostname=MQTT_HOST, device=device, logger=logging.getLogger(__name__))
 
     await client.start()
 
