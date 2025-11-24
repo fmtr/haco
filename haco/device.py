@@ -23,7 +23,7 @@ class Device(Base):
     controls: List[Control] = field(default_factory=list, metadata=dict(exclude=True))
 
     parent: ClientHaco | None = field(metadata=dict(exclude=True), init=False)
-    announce: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
+    # announce: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
     subscriptions: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
 
 
@@ -34,7 +34,7 @@ class Device(Base):
 
         for control in self.controls:
             control.set_parent(self)
-        self.announce = self.get_announce()
+        #self.announce = self.get_announce()
         self.subscriptions = self.get_subscriptions()
 
         self
@@ -47,12 +47,10 @@ class Device(Base):
     def name_san(self) -> str:
         return sanitize_name(self.name)
 
-    def get_announce(self):
+    async def announce(self):
+        for control in self.controls:
+            await control.announce()
 
-        data = {}
-        for capability in self.controls:
-            data |= capability.announce
-        return data
 
     @property
     def client(self):

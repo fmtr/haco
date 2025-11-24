@@ -2,7 +2,6 @@ import aiomqtt
 import asyncio
 
 from fmtr.tools import mqtt, Constants
-from fmtr.tools.json_tools import to_json
 from haco import constants
 from haco.obs import logger
 
@@ -35,22 +34,16 @@ class ClientHaco(mqtt.Client):
             payload = message.payload.decode()
             logger.info(f"{message.topic.value}{Constants.ARROW}{payload}")
             topic_command = self.device.subscriptions[message.topic.value]
-            echo_val = topic_command.wrap_back(message)
+            echo_val = await topic_command.wrap_back(message)
 
-            # Echo back as new state
-            topic_state = topic_command.state
-            if topic_state:
-                await topic_state.wrap_back(echo_val)
+
 
     async def start(self):
         while True:
             try:
                 async with self:
 
-                    for topic, data in self.device.announce.items():
-                        data_json = to_json(data)
-                        logger.info(f'Announcing {topic} with {data_json}')
-                        await self.publish(topic, payload=data_json, retain=True)
+                    await self.device.announce()
 
                     await self.publish(self.will.topic, self.ONLINE, retain=True)
 

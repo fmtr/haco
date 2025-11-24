@@ -3,8 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
+from fmtr.tools.json_tools import to_json
 from haco.base import Base
 from haco.capabilities import Capability
+from haco.obs import logger
 from haco.utils import sanitize_name
 
 if TYPE_CHECKING:
@@ -21,7 +23,7 @@ class Control(Base):
     unique_id: str | None = field(default=None, init=False)
     availability_topic: str | None = field(default=None, init=False)
 
-    announce: dict | None = field(default=None, metadata=dict(exclude=True))
+    # announce: dict | None = field(default=None, metadata=dict(exclude=True))
     subscriptions: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
 
     def __post_init__(self):
@@ -36,7 +38,7 @@ class Control(Base):
         self.unique_id = self.get_unique_id()
         self.availability_topic = self.get_availability_topic()
         self.subscriptions = self.get_subscriptions()
-        self.announce = self.get_announce()
+        #self.announce = self.get_announce()
 
     @property
     def parent(self):
@@ -47,7 +49,6 @@ class Control(Base):
         for cap in self.capabilities:
             data |= cap.announce
 
-        data = {self.announce_topic: data}
         return data
 
     @classmethod
@@ -86,13 +87,16 @@ class Control(Base):
     async def initialise(self):
         ...
 
-    async def announce2(self):
+    async def announce(self):
         """
 
         Entities must be able to announce themselves to Home Assistant, e.g. when a pulldown changes its options, etc.
 
         """
-        await self.device.client.publish(self.announce_topic, self.announce)
+        topic = self.announce_topic
+        data_json = to_json(self.get_announce())
+        logger.info(f'Announcing {topic} with {data_json}')
+        await self.device.client.publish(topic, data_json, retain=True)
 
 
 if __name__ == "__main__":

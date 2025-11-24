@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from functools import cached_property
 from typing import ClassVar, TYPE_CHECKING
 
+from fmtr.tools import aio
 from haco.obs import logger
 
 if TYPE_CHECKING:
@@ -76,11 +77,19 @@ class AnnounceTopicState(AnnounceTopic):
 
     async def wrap_back(self, value):
         method = getattr(self.capability.control, self.callback_name, None)
+        is_async = aio.is_async(method)
+
+        # test
 
         try:
-            value_raw = method(value)
+
+            if is_async:
+                value_raw = await method(value)
+            else:
+                value_raw = method(value)
+
         except NotImplementedError:
-            logger.warning(f'No method implemented for {self.topic}')
+            logger.warning(f'No method implemented for {self.__class__.__name__}.{self.callback_name}: {self.topic}')
             return
 
         await self.capability.control.device.client.publish(self.topic, value_raw)
@@ -94,16 +103,31 @@ class AnnounceTopicCommand(AnnounceTopic):
     def state(self):
         return self.capability.state
 
-    def wrap_back(self, message):
+    async def wrap_back(self, message):
         method = getattr(self.capability.control, self.callback_name, None)
 
+        is_async = aio.is_async(method)
+
+        #test
+
         try:
-            value = method(message.payload.decode('utf-8'))
+
+            value = message.payload.decode('utf-8')
+
+            if is_async:
+                value_raw = await method(value)
+            else:
+                value_raw = method(value)
+
         except NotImplementedError:
             logger.warning(f'No method implemented for {self.topic}')
             return
 
-        return value
+        # Echo back as new state
+        topic_state = self.state
+        if topic_state:
+            await topic_state.wrap_back(value_raw)
+
 
     def get_subscriptions(self):
         return {self.topic: self}
