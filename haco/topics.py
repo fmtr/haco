@@ -89,7 +89,7 @@ class AnnounceTopicState(AnnounceTopic):
                 value_raw = method(value)
 
         except NotImplementedError:
-            logger.warning(f'No method implemented for {self.__class__.__name__}.{self.callback_name}: {self.topic}')
+            logger.warning(f'No method implemented for {self.capability.control.__class__.__name__}.{self.callback_name}: {self.topic}')
             return
 
         await self.capability.control.device.client.publish(self.topic, value_raw)
@@ -120,7 +120,7 @@ class AnnounceTopicCommand(AnnounceTopic):
                 value_raw = method(value)
 
         except NotImplementedError:
-            logger.warning(f'No method implemented for {self.topic}')
+            logger.warning(f'{self.capability.control.__class__.__name__}.{self.callback_name}: {self.topic}')
             return
 
         # Echo back as new state
