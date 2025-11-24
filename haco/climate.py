@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import Literal
 
-from capabilities import Capability
-from control import Control
+from haco.capabilities import Capability
+from haco.control import Control
 
 
 @dataclass(kw_only=True)

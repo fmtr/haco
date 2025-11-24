@@ -86,6 +86,14 @@ class Control(Base):
     async def initialise(self):
         ...
 
+    async def announce2(self):
+        """
+
+        Entities must be able to announce themselves to Home Assistant, e.g. when a pulldown changes its options, etc.
+
+        """
+        await self.device.client.publish(self.announce_topic, self.announce)
+
 
 if __name__ == "__main__":
     control = Control(name="test", platform="test")

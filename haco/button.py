@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from control import Control
 from haco.capabilities import Capability
+from haco.control import Control
 
 
 @dataclass(kw_only=True)
