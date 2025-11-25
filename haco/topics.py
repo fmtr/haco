@@ -76,7 +76,7 @@ class AnnounceTopicState(AnnounceTopic):
         return {}
 
     async def wrap_back(self, value):
-        method = getattr(self.capability.control, self.callback_name, None)
+        method = getattr(self.capability.control, f'_{self.callback_name}', None)
         is_async = aio.is_async(method)
 
         # test
@@ -93,7 +93,7 @@ class AnnounceTopicState(AnnounceTopic):
             return
 
         value_raw = self.capability.converters.state(value)
-        await self.capability.control.device.client.publish(self.topic, value_raw)
+        await self.capability.control.device.client.publish(self.topic, value_raw, retain=True)
         return value_raw
 
 @dataclass(kw_only=True)
@@ -105,7 +105,7 @@ class AnnounceTopicCommand(AnnounceTopic):
         return self.capability.state
 
     async def wrap_back(self, message):
-        method = getattr(self.capability.control, self.callback_name, None)
+        method = getattr(self.capability.control, f'_{self.callback_name}', None)
 
         is_async = aio.is_async(method)
         value = message.payload.decode('utf-8')

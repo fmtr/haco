@@ -15,7 +15,7 @@ OFF = 'OFF'
 
 BOOL_MAP = {True: ON, False: OFF}
 
-to_bool_ha = BOOL_MAP.get
+from_bool = BOOL_MAP.get
 
 def sanitize_name(s, sep='-'):
     chars = []
@@ -41,7 +41,7 @@ class Converters:
 
 class ConvertersBool(Converters):
     command: Callable = to_bool
-    state: Callable = to_bool_ha
+    state: Callable = from_bool
 
 
 class ConvertersString(Converters):

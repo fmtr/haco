@@ -41,6 +41,14 @@ class Control(Base, Generic[DeviceT]):
         self.subscriptions = self.get_subscriptions()
         #self.announce = self.get_announce()
 
+        for capability in self.capabilities:
+            for topic in capability.topics:
+                method_name = topic.callback_name
+                method = getattr(self, method_name, None)
+                if not method: continue
+                setattr(self, f'_{method_name}', method)
+                setattr(self, f'{method_name}', topic.wrap_back)
+
     @property
     def parent(self):
         return self.device
