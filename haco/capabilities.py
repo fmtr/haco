@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 
 from fmtr.tools.iterator_tools import strip_none
 from haco.base import Base
 from haco.topics import AnnounceTopicState, AnnounceTopicCommand
+from haco.utils import Converters
 
 if TYPE_CHECKING:
     from haco.control import Control
@@ -14,6 +15,8 @@ if TYPE_CHECKING:
 @dataclass(kw_only=True)
 class Capability(Base):
     name: str | None = None
+
+    converters: Type[Converters] | None = field(default=None, metadata=dict(exclude=True))
 
     state: AnnounceTopicState | None = field(default_factory=AnnounceTopicState)
     command: AnnounceTopicCommand | None = field(default_factory=AnnounceTopicCommand)
@@ -27,6 +30,7 @@ class Capability(Base):
         for topic in self.topics:
             topic.set_parent(self)
 
+        self.converters = self.converters or self.control.converters
         self.subscriptions = self.get_subscriptions()
 
         self.announce = self.get_announce()

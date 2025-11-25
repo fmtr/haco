@@ -1,24 +1,25 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, TypeVar, Generic, Type, ClassVar
 
 from fmtr.tools.json_tools import to_json
 from haco.base import Base
 from haco.capabilities import Capability
 from haco.obs import logger
-from haco.utils import sanitize_name
+from haco.utils import sanitize_name, Converters, ConvertersBool
 
 if TYPE_CHECKING:
     from haco.device import Device
 
+DeviceT = TypeVar("DeviceT", bound="Device")
 
 @dataclass(kw_only=True)
-class Control(Base):
+class Control(Base, Generic[DeviceT]):
+    converters: ClassVar[Type[Converters]] = ConvertersBool
+
     name: str
-
-
-    device: Device = field(default=None, init=False)
+    device: DeviceT = field(default=None, init=False)
     capabilities: None | list[Capability] = field(default=None, metadata=dict(exclude=True))
     unique_id: str | None = field(default=None, init=False)
     availability_topic: str | None = field(default=None, init=False)

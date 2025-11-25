@@ -84,14 +84,15 @@ class AnnounceTopicState(AnnounceTopic):
         try:
 
             if is_async:
-                value_raw = await method(value)
+                value = await method(value)
             else:
-                value_raw = method(value)
+                value = method(value)
 
         except NotImplementedError:
             logger.warning(f'No method implemented for {self.capability.control.__class__.__name__}.{self.callback_name}: {self.topic}')
             return
 
+        value_raw = self.capability.converters.state(value)
         await self.capability.control.device.client.publish(self.topic, value_raw)
         return value_raw
 
@@ -107,12 +108,10 @@ class AnnounceTopicCommand(AnnounceTopic):
         method = getattr(self.capability.control, self.callback_name, None)
 
         is_async = aio.is_async(method)
-
-        #test
+        value = message.payload.decode('utf-8')
+        value = self.capability.converters.command(value)
 
         try:
-
-            value = message.payload.decode('utf-8')
 
             if is_async:
                 value_raw = await method(value)

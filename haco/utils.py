@@ -1,5 +1,8 @@
 import string
 from dataclasses import dataclass
+from typing import Callable
+
+from fmtr.tools.datatype_tools import to_bool
 
 CHARS_ALLOWED = string.ascii_lowercase + string.digits
 SEPS = '_- /'
@@ -10,6 +13,9 @@ RECONNECT_DELAY_SEC = 5
 ON = 'ON'
 OFF = 'OFF'
 
+BOOL_MAP = {True: ON, False: OFF}
+
+to_bool_ha = BOOL_MAP.get
 
 def sanitize_name(s, sep='-'):
     chars = []
@@ -27,6 +33,20 @@ def sanitize_name(s, sep='-'):
 
     return sanitized
 
+
+class Converters:
+    command: Callable = None
+    state: Callable = None
+
+
+class ConvertersBool(Converters):
+    command: Callable = to_bool
+    state: Callable = to_bool_ha
+
+
+class ConvertersString(Converters):
+    command: Callable = str
+    state: Callable = str
 
 @dataclass
 class Metadata:
