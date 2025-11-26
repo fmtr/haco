@@ -34,7 +34,7 @@ class ClientHaco(mqtt.Client):
             payload = message.payload.decode()
             logger.info(f"{message.topic.value}{Constants.ARROW}{payload}")
             topic_command = self.device.subscriptions[message.topic.value]
-            echo_val = await topic_command.wrap_back(message)
+            echo_val = await topic_command.handle(message)
 
 
 

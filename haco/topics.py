@@ -34,7 +34,7 @@ class AnnounceTopic:
         method_name = self.callback_name
         method = getattr(self.capability.control, method_name, None)
         self.control_method = method
-        setattr(self.capability.control, method_name, self.wrap_back)
+        setattr(self.capability.control, method_name, self.handle)
 
     def fill(self, mask):
         return mask.format(**self.fills)
@@ -76,7 +76,7 @@ class AnnounceTopic:
     def capability(self):
         return self.parent
 
-    def wrap_back(self, value):
+    async def handle(self, value):
         raise NotImplementedError()
 
 
@@ -87,7 +87,7 @@ class AnnounceTopicState(AnnounceTopic):
     def get_subscriptions(self):
         return {}
 
-    async def wrap_back(self, value):
+    async def handle(self, value=None):
 
         if not self.control_method:
             logger.error(f'Incomplete base class: {self.callback_class_method_name}')
@@ -117,7 +117,7 @@ class AnnounceTopicCommand(AnnounceTopic):
     def state(self):
         return self.capability.state
 
-    async def wrap_back(self, message):
+    async def handle(self, message):
 
         if not self.control_method:
             logger.error(f'Incomplete base class: {self.callback_class_method_name}')
@@ -141,7 +141,7 @@ class AnnounceTopicCommand(AnnounceTopic):
         # Echo back as new state
         topic_state = self.state
         if topic_state:
-            await topic_state.wrap_back(value_raw)
+            await topic_state.handle(value_raw)
 
 
     def get_subscriptions(self):

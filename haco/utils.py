@@ -2,6 +2,7 @@ import string
 from dataclasses import dataclass
 from typing import Callable
 
+from fmtr.tools import json
 from fmtr.tools.datatype_tools import to_bool
 
 CHARS_ALLOWED = string.ascii_lowercase + string.digits
@@ -47,6 +48,11 @@ class ConvertersBool(Converters):
 class ConvertersString(Converters):
     command: Callable = str
     state: Callable = str
+
+
+class ConvertersNumeric(Converters):
+    command: Callable = json.from_json
+    state: Callable = json.to_json
 
 @dataclass
 class Metadata:

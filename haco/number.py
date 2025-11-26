@@ -1,38 +1,32 @@
+from dataclasses import dataclass
+from enum import StrEnum
+from typing import ClassVar, Type
+
 from haco.control import Control
-from haco.tools import get_range_pair
+from haco.uom import Uom
+from haco.utils import Converters, ConvertersNumeric
 
-from haco.data.uom import Uom
+
+class Mode(StrEnum):
+    BOX = "box"
+    SLIDER = "slider"
 
 
+@dataclass(kw_only=True)
 class Number(Control):
-    NAME = 'number'
-    UOM = Uom
+    DATA = dict(
+        platform='number'
+    )
+    converters: ClassVar[Type[Converters]] = ConvertersNumeric
 
-    # def init(name, number_range, mode, step, uom, entity_id, icon, callbacks)
-    def __init__(self, name, number_range: range, icon=None, mode=None, step=None, uom=None):
+    min: float = 0.
+    max: float = 100.
+    mode: Mode = Mode.SLIDER
+    step: float = 1.
+    uom: Uom | None = None
 
-        self.min, self.max = get_range_pair(number_range)
-        self.mode = mode
-        self.step = step
-        self.uom = uom
+    def command(self, value):
+        raise NotImplementedError()
 
-        super().__init__(name, icon=icon)
-
-    @property
-    def control_type(self):
-
-        if self.step is None or self.step == 1:
-            return int
-        else:
-            return float
-
-    def get_config_ha_ex(self):
-        data = {
-            'min': self.min,
-            'max': self.max,
-            'mode': self.mode,
-            'unit_of_measurement': self.uom,
-            'step': self.step
-        }
-
-        return data
+    def state(self, value):
+        raise NotImplementedError()
