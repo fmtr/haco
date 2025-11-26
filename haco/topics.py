@@ -106,7 +106,7 @@ class AnnounceTopicState(AnnounceTopic):
             return
 
         value_raw = self.capability.converters.state(value)
-        await self.capability.control.device.client.publish(self.topic, value_raw, retain=True)
+        await self.capability.control.device.client.publish(self.topic, value_raw)
         return value_raw
 
 @dataclass(kw_only=True)
