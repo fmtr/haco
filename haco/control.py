@@ -41,13 +41,7 @@ class Control(Base, Generic[DeviceT]):
         self.subscriptions = self.get_subscriptions()
         #self.announce = self.get_announce()
 
-        for capability in self.capabilities:
-            for topic in capability.topics:
-                method_name = topic.callback_name
-                method = getattr(self, method_name, None)
-                if not method: continue
-                setattr(self, f'_{method_name}', method)
-                setattr(self, f'{method_name}', topic.wrap_back)
+
 
     @property
     def parent(self):
@@ -56,7 +50,7 @@ class Control(Base, Generic[DeviceT]):
     def get_announce(self):
         data = self.model_dump()
         for cap in self.capabilities:
-            data |= cap.announce
+            data |= cap.get_announce()
 
         return data
 
@@ -89,7 +83,7 @@ class Control(Base, Generic[DeviceT]):
         data = {}
 
         for capability in self.capabilities:
-            data |= capability.subscriptions
+            data |= capability.get_subscriptions()
 
         return data
 

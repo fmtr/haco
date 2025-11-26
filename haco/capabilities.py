@@ -20,7 +20,7 @@ class Capability(Base):
 
     state: AnnounceTopicState | None = field(default_factory=AnnounceTopicState)
     command: AnnounceTopicCommand | None = field(default_factory=AnnounceTopicCommand)
-    subscriptions: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
+
 
     parent: Control | None = None
     announce = None
@@ -31,20 +31,17 @@ class Capability(Base):
             topic.set_parent(self)
 
         self.converters = self.converters or self.control.converters
-        self.subscriptions = self.get_subscriptions()
-
-        self.announce = self.get_announce()
 
     def get_announce(self) -> dict:
         data = {}
         for topic in self.topics:
-            data |= topic.announce
+            data |= topic.get_announce()
         return data
 
     def get_subscriptions(self) -> dict:
         data = {}
         for topic in self.topics:
-            data |= topic.subscriptions
+            data |= topic.get_subscriptions()
         return data
 
     @property

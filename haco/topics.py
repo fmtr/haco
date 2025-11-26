@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import ClassVar, TYPE_CHECKING
+from typing import ClassVar, TYPE_CHECKING, Callable
 
 from fmtr.tools import aio
 from haco.obs import logger
@@ -24,12 +24,17 @@ class AnnounceTopic:
     announce: dict | None = field(default=None, metadata=dict(exclude=True))
     subscriptions: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
 
+    control_method: Callable | None = field(default=None, metadata=dict(exclude=True))
+
     def set_parent(self, capability: Capability):
         self.parent = capability
         if self.key is None:
             self.key = self.KEY_DEFAULTS[bool(self.capability.name)]
-        self.announce = self.get_announce()
-        self.subscriptions = self.get_subscriptions()
+
+        method_name = self.callback_name
+        method = getattr(self.capability.control, method_name, None)
+        self.control_method = method
+        setattr(self.capability.control, method_name, self.wrap_back)
 
     def fill(self, mask):
         return mask.format(**self.fills)
@@ -60,12 +65,19 @@ class AnnounceTopic:
 
         return f'{self.capability.name}_{self.IO}'
 
+    @property
+    def callback_class_method_name(self):
+        return f'{self.capability.control.__class__.__name__}.{self.callback_name}'
+
     def get_subscriptions(self):
         return {}
 
     @cached_property
     def capability(self):
         return self.parent
+
+    def wrap_back(self, value):
+        raise NotImplementedError()
 
 
 @dataclass(kw_only=True)
@@ -76,20 +88,21 @@ class AnnounceTopicState(AnnounceTopic):
         return {}
 
     async def wrap_back(self, value):
-        method = getattr(self.capability.control, f'_{self.callback_name}', None)
-        is_async = aio.is_async(method)
 
-        # test
+        if not self.control_method:
+            logger.error(f'Incomplete base class: {self.callback_class_method_name}')
+            return
 
+        is_async = aio.is_async(self.control_method)
         try:
 
             if is_async:
-                value = await method(value)
+                value = await self.control_method(value)
             else:
-                value = method(value)
+                value = self.control_method(value)
 
         except NotImplementedError:
-            logger.warning(f'No method implemented for {self.capability.control.__class__.__name__}.{self.callback_name}: {self.topic}')
+            logger.warning(f'Subclass has not implemented method: {self.callback_class_method_name} {self.topic} {value}')
             return
 
         value_raw = self.capability.converters.state(value)
@@ -105,21 +118,24 @@ class AnnounceTopicCommand(AnnounceTopic):
         return self.capability.state
 
     async def wrap_back(self, message):
-        method = getattr(self.capability.control, f'_{self.callback_name}', None)
 
-        is_async = aio.is_async(method)
+        if not self.control_method:
+            logger.error(f'Incomplete base class: {self.callback_class_method_name}')
+            return
+
+        is_async = aio.is_async(self.control_method)
         value = message.payload.decode('utf-8')
         value = self.capability.converters.command(value)
 
         try:
 
             if is_async:
-                value_raw = await method(value)
+                value_raw = await self.control_method(value)
             else:
-                value_raw = method(value)
+                value_raw = self.control_method(value)
 
         except NotImplementedError:
-            logger.warning(f'{self.capability.control.__class__.__name__}.{self.callback_name}: {self.topic}')
+            logger.warning(f'Subclass has not implemented method: {self.callback_class_method_name} {self.topic} {value}')
             return
 
         # Echo back as new state
