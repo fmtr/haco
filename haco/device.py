@@ -15,8 +15,9 @@ if TYPE_CHECKING:
 @dataclass(kw_only=True)
 class Device(Base):
     name: str
-    manufacturer: str = "Demo"
-    model: str = "Python MQTT Example"
+    manufacturer: str | None = None
+    model: str | None = None
+    sw_version: str | None = None
 
     identifiers: list[str] | None = field(default=None, init=False)
 
