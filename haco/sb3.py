@@ -7,7 +7,7 @@ from haco.climate import Climate
 from haco.constants import MQTT_HOST
 from haco.device import Device
 from haco.obs import logger
-from haco.pulldown import Select
+from haco.select import Select
 from haco.switch import Switch
 
 handler = logger.LogfireLoggingHandler()

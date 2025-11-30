@@ -53,7 +53,7 @@ jobs:
         with:
           tag_name: v${{ env.VERSION }}
           generate_release_notes: true
-          prerelease: true
+          #prerelease: true
 
       - name: Build Wheel
         run: |
