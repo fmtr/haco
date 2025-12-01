@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, TypeVar, Generic, Type, ClassVar
 from fmtr.tools.json_tools import to_json
 from haco.base import Base
 from haco.capabilities import Capability
+from haco.constants import PREFIX_MDI
 from haco.obs import logger
 from haco.utils import sanitize_name, Converters, ConvertersBool
 
@@ -14,11 +15,13 @@ if TYPE_CHECKING:
 
 DeviceT = TypeVar("DeviceT", bound="Device")
 
+
 @dataclass(kw_only=True)
 class Control(Base, Generic[DeviceT]):
     converters: ClassVar[Type[Converters]] = ConvertersBool
 
     name: str
+    icon: str | None = None
     device: DeviceT = field(default=None, init=False)
     capabilities: None | list[Capability] = field(default=None, metadata=dict(exclude=True))
     unique_id: str | None = field(default=None, init=False)
@@ -29,6 +32,13 @@ class Control(Base, Generic[DeviceT]):
 
     def __post_init__(self):
         self.capabilities = self.get_capabilities()
+
+        if not self.icon:
+            return
+
+        if not self.icon.startswith(PREFIX_MDI):
+            self.icon = f"{PREFIX_MDI}{self.icon}"
+
 
     def set_parent(self, device):
         self.device = device
