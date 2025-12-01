@@ -101,6 +101,12 @@ class Control(Base, Generic[DeviceT]):
         logger.info(f'Announcing {topic} with {data_json}')
         await self.device.client.publish(topic, data_json, retain=True)
 
+        for capability in self.capabilities:
+            if not capability.state:
+                continue
+            await capability.state.handle(value=None)
+
+
 
 if __name__ == "__main__":
     control = Control(name="test", platform="test")
