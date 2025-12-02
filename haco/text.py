@@ -1,27 +1,29 @@
+from dataclasses import dataclass
+from enum import StrEnum
+
 from haco.control import Control
+from haco.utils import ConvertersString
 
-from haco.tools import get_range_pair
+
+class Mode(StrEnum):
+    TEXT = "text"
+    PASSWORD = "password"
 
 
+@dataclass(kw_only=True)
 class Text(Control):
-    NAME = 'text'
+    DATA = dict(
+        platform='text'
+    )
+    converters = ConvertersString
 
-    def __init__(self, name, icon=None, size_range: range = None, pattern: str = None):
-        self.min, self.max = get_range_pair(size_range)
-        self.pattern = pattern
+    pattern: str | None = None
+    min: int | None = None
+    max: int | None = None
+    mode: Mode = Mode.TEXT
 
-        super().__init__(name, icon=icon)
+    def command(self, value):
+        raise NotImplementedError()
 
-    def get_config_ha_ex(self):
-        data = {
-            'min': self.min,
-            'max': self.max,
-            'pattern': self.pattern,
-            'mode': self.__class__.__name__.lower()
-        }
-
-        return data
-
-
-class Password(Text):
-    ...
+    def state(self, value):
+        raise NotImplementedError()
