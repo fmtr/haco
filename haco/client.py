@@ -34,7 +34,7 @@ class ClientHaco(mqtt.Client):
             payload = message.payload.decode()
             logger.info(f"{message.topic.value}{Constants.ARROW}{payload}")
             topic_command = self.device.subscriptions[message.topic.value]
-            echo_val = await topic_command.handle(message)
+            await topic_command.handle(message)
 
 
 
@@ -42,15 +42,10 @@ class ClientHaco(mqtt.Client):
         while True:
             try:
                 async with self:
-
-                    await self.device.announce()
-
+                    await self.device.initialise()
                     await self.publish(self.will.topic, self.ONLINE, retain=True)
-
-                    # await self.publish('haco/development/3012edb1a6d4-1ed9c3469373/dev-device/dev-climate-b/power/command', "OFF", retain=True)
-
                     await self.handle()
 
             except aiomqtt.MqttError as e:
-                logger.info(f"⚠️ MQTT disconnected: {e}; retrying in 5s")
+                logger.info(f"MQTT disconnected: {e}; retrying in 5s")
                 await asyncio.sleep(5)

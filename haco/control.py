@@ -98,7 +98,11 @@ class Control(Base, Generic[DeviceT]):
         return data
 
     async def initialise(self):
-        ...
+        await self.announce()
+        for capability in self.capabilities:
+            if not capability.state:
+                continue
+            await capability.state.handle(value=None)
 
     async def announce(self):
         """
@@ -110,11 +114,6 @@ class Control(Base, Generic[DeviceT]):
         data_json = to_json(self.get_announce())
         logger.info(f'Announcing {topic} with {data_json}')
         await self.device.client.publish(topic, data_json, retain=True)
-
-        for capability in self.capabilities:
-            if not capability.state:
-                continue
-            await capability.state.handle(value=None)
 
 
 

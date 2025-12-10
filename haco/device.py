@@ -24,7 +24,6 @@ class Device(Base):
     controls: List[Control] = field(default_factory=list, metadata=dict(exclude=True))
 
     parent: ClientHaco | None = field(metadata=dict(exclude=True), init=False)
-    # announce: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
     subscriptions: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
 
 
@@ -51,6 +50,10 @@ class Device(Base):
     async def announce(self):
         for control in self.controls:
             await control.announce()
+
+    async def initialise(self):
+        for control in self.controls:
+            await control.initialise()
 
 
     @property
