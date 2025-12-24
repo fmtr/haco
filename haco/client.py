@@ -1,7 +1,7 @@
 import aiomqtt
 import asyncio
 
-from fmtr.tools import mqtt, Constants
+from fmtr.tools import mqtt
 from haco import constants
 from haco.constants import SUBSCRIBE
 from haco.obs import logger
@@ -30,8 +30,6 @@ class ClientHaco(mqtt.Client):
             await self.subscribe(topic_sub)
 
         async for message in self.messages:
-            payload = message.payload.decode()
-            logger.info(f"{message.topic.value}{Constants.ARROW}{payload}")
             topic_command = self.device.subscriptions[message.topic.value]
             await topic_command.handle(message)
 
