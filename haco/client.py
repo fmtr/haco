@@ -3,14 +3,14 @@ import asyncio
 
 from fmtr.tools import mqtt, Constants
 from haco import constants
+from haco.constants import SUBSCRIBE
 from haco.obs import logger
+from haco.utils import get_prefix
 
 
 class ClientHaco(mqtt.Client):
     ONLINE = 'online'
     OFFLINE = 'offline'
-
-    aiomqtt.Client
 
     def __init__(self, *args, device=None, will=None, identifier=None, **kwargs):
         self.will = will or mqtt.Will(topic=str(constants.TOPIC_AVAIL), payload=self.OFFLINE, retain=True, qos=1, )
@@ -24,10 +24,9 @@ class ClientHaco(mqtt.Client):
         return constants.TOPIC_CLIENT
 
     async def handle(self):
-        """Listen for command messages from HA."""        
 
         for topic_sub in self.device.subscriptions.keys():
-            logger.info(f"Subscribing to {topic_sub}")
+            logger.info(f"{get_prefix(SUBSCRIBE)}: {topic_sub}")
             await self.subscribe(topic_sub)
 
         async for message in self.messages:

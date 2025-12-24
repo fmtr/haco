@@ -3,12 +3,13 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypeVar, Generic, Type, ClassVar
 
+from fmtr.tools import Constants
 from fmtr.tools.json_tools import to_json
 from haco.base import Base
 from haco.capabilities import Capability
-from haco.constants import PREFIX_MDI
+from haco.constants import PREFIX_MDI, ANNOUNCE
 from haco.obs import logger
-from haco.utils import sanitize_name, Converters, ConvertersBool
+from haco.utils import sanitize_name, Converters, ConvertersBool, get_prefix
 
 if TYPE_CHECKING:
     from haco.device import Device
@@ -27,7 +28,6 @@ class Control(Base, Generic[DeviceT]):
     unique_id: str | None = field(default=None, init=False)
     availability_topic: str | None = field(default=None, init=False)
 
-    # announce: dict | None = field(default=None, metadata=dict(exclude=True))
     subscriptions: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
 
     def __post_init__(self):
@@ -49,9 +49,6 @@ class Control(Base, Generic[DeviceT]):
         self.unique_id = self.get_unique_id()
         self.availability_topic = self.get_availability_topic()
         self.subscriptions = self.get_subscriptions()
-        #self.announce = self.get_announce()
-
-
 
     @property
     def parent(self):
@@ -111,8 +108,11 @@ class Control(Base, Generic[DeviceT]):
 
         """
         topic = self.announce_topic
-        data_json = to_json(self.get_announce())
-        logger.info(f'Announcing {topic} with {data_json}')
+        data = self.get_announce()
+        data_json = to_json(data)
+
+        logger.info(f'{get_prefix(ANNOUNCE)}: {data} {Constants.ARROW_RIGHT} {topic}')
+
         await self.device.client.publish(topic, data_json, retain=True)
 
 

@@ -4,8 +4,9 @@ from dataclasses import dataclass, field
 from functools import cached_property
 from typing import ClassVar, TYPE_CHECKING, Callable
 
-from fmtr.tools import aio
+from fmtr.tools import aio, Constants
 from haco.obs import logger
+from haco.utils import get_prefix
 
 if TYPE_CHECKING:
     from capabilities import Capability
@@ -107,6 +108,9 @@ class AnnounceTopicState(AnnounceTopic):
 
         value_raw = self.capability.converters.state(value)
         await self.capability.control.device.client.publish(self.topic, value_raw)
+
+        logger.info(f'{get_prefix(self.IO)}: {self.topic} {Constants.ARROW_RIGHT} {value_raw}')
+
         return value_raw
 
 @dataclass(kw_only=True)
@@ -119,14 +123,17 @@ class AnnounceTopicCommand(AnnounceTopic):
 
     async def handle(self, message):
 
+        value = message.payload.decode('utf-8')
+        value = self.capability.converters.command(value)
+
+        logger.info(f'{get_prefix(self.IO)}: {value} {Constants.ARROW_LEFT} {self.topic}')
+
+
         if not self.control_method:
             logger.error(f'Incomplete base class: {self.callback_class_method_name}')
             return
 
         is_async = aio.is_async(self.control_method)
-        value = message.payload.decode('utf-8')
-        value = self.capability.converters.command(value)
-
         try:
 
             if is_async:
@@ -138,7 +145,6 @@ class AnnounceTopicCommand(AnnounceTopic):
             logger.warning(f'Subclass has not implemented method: {self.callback_class_method_name} {self.topic} {value}')
             return
 
-        # Echo back as new state
         topic_state = self.state
         if topic_state:
             await topic_state.handle(value_raw)

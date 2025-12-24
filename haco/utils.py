@@ -57,3 +57,7 @@ class ConvertersNumeric(Converters):
 @dataclass
 class Metadata:
     exclude: bool = False
+
+
+def get_prefix(io: str) -> str:
+    return io[:2].upper()

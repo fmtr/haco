@@ -34,10 +34,7 @@ class Device(Base):
 
         for control in self.controls:
             control.set_parent(self)
-        #self.announce = self.get_announce()
         self.subscriptions = self.get_subscriptions()
-
-        self
 
     @cached_property
     def topic(self):

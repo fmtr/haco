@@ -13,3 +13,6 @@ TOPIC_ROOT = Path(paths.name) / env.CHANNEL
 TOPIC_CLIENT = TOPIC_ROOT / CLIENT_ID
 TOPIC_AVAIL = TOPIC_CLIENT / STATUS
 PREFIX_MDI = "mdi:"
+
+ANNOUNCE = 'announce'
+SUBSCRIBE = 'subscribe'
