@@ -1,10 +1,10 @@
 name: Version and Deploy
 
-on:
-  push:
-    paths:
-      - 'haco/version'
-  workflow_dispatch:
+#on:
+#  push:
+#    paths:
+#      - 'haco/version'
+#  workflow_dispatch:
 
 
 jobs:
