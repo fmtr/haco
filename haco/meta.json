@@ -1,5 +1,5 @@
 {
-    "version": "0.2.0-alpha000",
+    "version": "0.2.0",
     "port": 6,
     "entrypoint": null,
     "base": "python",
