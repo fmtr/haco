@@ -4,7 +4,7 @@ setup = Setup(
     org=None,
     dependencies=dict(
         install=[
-            'corio[version.dev,logging,sets,yaml,debug,caching,api,mqtt]==2.0.0a3',
+            'corio[version.dev,logging,sets,yaml,debug,caching,api,mqtt]',
         ]
     ),
     description='Home Assistant Control Objects',
