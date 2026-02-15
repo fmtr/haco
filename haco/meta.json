@@ -1,5 +1,17 @@
 {
-  "version": "0.1.9",
-  "port": 6,
-  "is_pypi": true
+    "version": "0.2.0-alpha000",
+    "port": 6,
+    "entrypoint": null,
+    "base": "python",
+    "description": null,
+    "org_singleton": null,
+    "org_github": "fmtr",
+    "org_friendly": "Frontmatter AI",
+    "is_client": false,
+    "scripts": [],
+    "services": [],
+    "docs": {},
+    "setup": {},
+    "is_pypi": true,
+    "is_dockerhub": false
 }
