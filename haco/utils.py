@@ -2,8 +2,8 @@ import string
 from dataclasses import dataclass
 from typing import Callable
 
-from fmtr.tools import json
-from fmtr.tools.datatype_tools import to_bool
+from corio import json
+from corio.datatype_tools import to_bool
 
 CHARS_ALLOWED = string.ascii_lowercase + string.digits
 SEPS = '_- /'

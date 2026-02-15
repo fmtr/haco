@@ -3,8 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypeVar, Generic, Type, ClassVar
 
-from fmtr.tools import Constants
-from fmtr.tools.json_tools import to_json
+from corio import Constants
+from corio.json_tools import to_json
 from haco.base import Base
 from haco.capabilities import Capability
 from haco.constants import PREFIX_MDI, ANNOUNCE

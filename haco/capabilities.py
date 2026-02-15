@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Type
 
-from fmtr.tools.iterator_tools import strip_none
+from corio.iterator_tools import strip_none
 from haco.base import Base
 from haco.topics import AnnounceTopicState, AnnounceTopicCommand
 from haco.utils import Converters

@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from functools import cached_property
 from typing import ClassVar, TYPE_CHECKING, Callable
 
-from fmtr.tools import aio, Constants
+from corio import aio, Constants
 from haco.obs import logger
 from haco.utils import get_prefix
 

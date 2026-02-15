@@ -1,7 +1,7 @@
 import aiomqtt
 import asyncio
 
-from fmtr.tools import mqtt
+from corio import mqtt
 from haco import constants
 from haco.constants import SUBSCRIBE
 from haco.obs import logger
