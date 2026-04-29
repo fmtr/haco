@@ -4,7 +4,9 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypeVar, Generic, Type, ClassVar
 
 from corio import Constants
+from corio import Path
 from corio.json_tools import to_json
+
 from haco.base import Base
 from haco.capabilities import Capability
 from haco.constants import PREFIX_MDI, ANNOUNCE
@@ -19,6 +21,11 @@ DeviceT = TypeVar("DeviceT", bound="Device")
 
 @dataclass(kw_only=True)
 class Control(Base, Generic[DeviceT]):
+    """
+
+    Base class for Home Assistant controls.
+
+    """
     converters: ClassVar[Type[Converters]] = ConvertersBool
 
     name: str
@@ -39,8 +46,12 @@ class Control(Base, Generic[DeviceT]):
         if not self.icon.startswith(PREFIX_MDI):
             self.icon = f"{PREFIX_MDI}{self.icon}"
 
+    def set_parent(self, device: DeviceT):
+        """
 
-    def set_parent(self, device):
+        Set the parent device for the control and its capabilities.
+
+        """
         self.device = device
 
         for cap in self.capabilities:
@@ -51,10 +62,20 @@ class Control(Base, Generic[DeviceT]):
         self.subscriptions = self.get_subscriptions()
 
     @property
-    def parent(self):
+    def parent(self) -> DeviceT:
+        """
+
+        The parent device of the control.
+
+        """
         return self.device
 
-    def get_announce(self):
+    def get_announce(self) -> dict:
+        """
+
+        Get the discovery announcement data for the control.
+
+        """
         data = self.model_dump()
         for cap in self.capabilities:
             data |= cap.get_announce()
@@ -62,7 +83,12 @@ class Control(Base, Generic[DeviceT]):
         return data
 
     @classmethod
-    def get_capabilities(cls):
+    def get_capabilities(cls) -> list[Capability]:
+        """
+
+        Get the capabilities of the control.
+
+        """
         return [
             Capability(name=None)
         ]
@@ -72,20 +98,45 @@ class Control(Base, Generic[DeviceT]):
 
     @property
     def name_san(self) -> str:
+        """
+
+        Sanitized name of the control.
+
+        """
         return sanitize_name(self.name)
 
     @property
-    def topic(self):
+    def topic(self) -> Path:
+        """
+
+        The MQTT topic prefix for the control.
+
+        """
         return self.device.topic / self.name_san
 
     @property
-    def announce_topic(self):
+    def announce_topic(self) -> str:
+        """
+
+        The MQTT topic for discovery announcement.
+
+        """
         return f"homeassistant/{self.DATA['platform']}/{self.unique_id}/config"
 
     def get_availability_topic(self) -> str:
+        """
+
+        Get the availability topic for the control (uses the client's will topic).
+
+        """
         return self.device.client.will.topic
 
     def get_subscriptions(self) -> dict:
+        """
+
+        Get the MQTT topic subscriptions for the control's capabilities.
+
+        """
 
         data = {}
 
@@ -95,6 +146,11 @@ class Control(Base, Generic[DeviceT]):
         return data
 
     async def initialise(self):
+        """
+
+        Initialise the control by announcing it and setting its initial state.
+
+        """
         await self.announce()
         for capability in self.capabilities:
             if not capability.state:
@@ -104,7 +160,7 @@ class Control(Base, Generic[DeviceT]):
     async def announce(self):
         """
 
-        Entities must be able to announce themselves to Home Assistant, e.g. when a pulldown changes its options, etc.
+        Announce the control to Home Assistant via MQTT discovery.
 
         """
         topic = self.announce_topic

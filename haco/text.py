@@ -12,6 +12,11 @@ class Mode(StrEnum):
 
 @dataclass(kw_only=True)
 class Text(Control):
+    """
+
+    A text control for text input in Home Assistant.
+
+    """
     DATA = dict(
         platform='text'
     )
@@ -22,8 +27,18 @@ class Text(Control):
     max: int | None = None
     mode: Mode = Mode.TEXT
 
-    def command(self, value):
+    def command(self, value: str) -> str:
+        """
+
+        Handle text input commands from Home Assistant.
+
+        """
         raise NotImplementedError()
 
-    def state(self, value):
+    def state(self, value: str | None) -> str:
+        """
+
+        Return the current text state.
+
+        """
         raise NotImplementedError()

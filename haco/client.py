@@ -1,7 +1,9 @@
-import aiomqtt
 import asyncio
+from pathlib import Path
 
+import aiomqtt
 from corio import mqtt
+
 from haco import constants
 from haco.constants import SUBSCRIBE
 from haco.obs import logger
@@ -9,6 +11,11 @@ from haco.utils import get_prefix
 
 
 class ClientHaco(mqtt.Client):
+    """
+
+    MQTT Client for haco, handling communication between Home Assistant and a device.
+
+    """
     ONLINE = 'online'
     OFFLINE = 'offline'
 
@@ -20,10 +27,20 @@ class ClientHaco(mqtt.Client):
         super().__init__(*args, will=self.will, identifier=identifier, **kwargs)
 
     @property
-    def topic(self):
+    def topic(self) -> Path:
+        """
+
+        The MQTT topic prefix for the client.
+
+        """
         return constants.TOPIC_CLIENT
 
     async def handle(self):
+        """
+
+        Handle incoming MQTT messages by delegating them to the device's controls.
+
+        """
 
         for topic_sub in self.device.subscriptions.keys():
             logger.info(f"{get_prefix(SUBSCRIBE)}: {topic_sub}")
@@ -36,6 +53,11 @@ class ClientHaco(mqtt.Client):
 
 
     async def start(self):
+        """
+
+        Start the MQTT client and handle reconnection.
+
+        """
         while True:
             try:
                 async with self:

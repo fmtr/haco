@@ -6,9 +6,20 @@ from typing import Any
 
 @dataclass(kw_only=True)
 class Base:
+    """
+
+    Base class for haco objects. Provides model dumping functionality.
+
+    """
+
     DATA = dict()
 
     def model_dump(self) -> dict[str, Any]:
+        """
+
+        Dump the object to a dictionary, excluding fields marked with `exclude=True` in metadata.
+
+        """
         data = {} | self.DATA
         for fld in fields(self):
             meta = fld.metadata

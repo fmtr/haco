@@ -10,7 +10,19 @@
     "is_client": false,
     "scripts": [],
     "services": [],
-    "docs": {},
+    "docs": {
+        "nav": [
+            {
+                "Home": "index.md"
+            },
+            {
+                "Quick Start": "quick-start.md"
+            },
+            {
+                "Control Types": "controls.md"
+            }
+        ]
+    },
     "setup": {},
     "is_pypi": true,
     "is_dockerhub": false

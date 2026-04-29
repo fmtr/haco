@@ -45,20 +45,40 @@ class DeviceClass(StrEnum):
 
 @dataclass(kw_only=True)
 class BinarySensor(Control):
+    """
+
+    A binary sensor for reporting on/off states to Home Assistant.
+
+    """
     DATA = dict(
         platform='binary_sensor'
     )
 
     device_class: DeviceClass | None = None
 
-    def command(self, value):
+    def command(self, value: bool):
+        """
+
+        Binary sensors do not support commands.
+
+        """
         raise NotImplementedError()
 
-    def state(self, value):
+    def state(self, value: bool | None) -> bool:
+        """
+
+        Return the current state of the binary sensor.
+
+        """
         raise NotImplementedError()
 
     @classmethod
-    def get_capabilities(cls):
+    def get_capabilities(cls) -> list[Capability]:
+        """
+
+        Get the capabilities for the binary sensor (state only).
+
+        """
         return [
             Capability(name=None, command=None)
         ]

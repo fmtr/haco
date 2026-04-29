@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import StrEnum
+from typing import Any
 
 from haco.capabilities import Capability
 from haco.control import Control
@@ -68,6 +69,11 @@ class DeviceClass(StrEnum):
 
 @dataclass(kw_only=True)
 class Sensor(Control):
+    """
+
+    A sensor control for reporting numeric or string values to Home Assistant.
+
+    """
     DATA = dict(
         platform='sensor'
     )
@@ -76,14 +82,29 @@ class Sensor(Control):
     unit_of_measurement: Uom | None = None
     device_class: DeviceClass | None = None
 
-    def command(self, value):
+    def command(self, value: Any):
+        """
+
+        Sensors do not support commands.
+
+        """
         raise NotImplementedError()
 
-    def state(self, value):
+    def state(self, value: Any) -> Any:
+        """
+
+        Return the current state of the sensor.
+
+        """
         raise NotImplementedError()
 
     @classmethod
-    def get_capabilities(cls):
+    def get_capabilities(cls) -> list[Capability]:
+        """
+
+        Get the capabilities for the sensor (state only).
+
+        """
         return [
             Capability(name=None, command=None)
         ]

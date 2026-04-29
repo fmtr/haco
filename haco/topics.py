@@ -5,6 +5,7 @@ from functools import cached_property
 from typing import ClassVar, TYPE_CHECKING, Callable
 
 from corio import aio, Constants
+
 from haco.obs import logger
 from haco.utils import get_prefix
 
@@ -14,6 +15,11 @@ if TYPE_CHECKING:
 
 @dataclass(kw_only=True)
 class AnnounceTopic:
+    """
+
+    Base class for MQTT topics used for discovery and communication.
+
+    """
     IO: ClassVar[str | None] = None
 
     KEY_DEFAULTS: ClassVar[dict] = {True: '{capability}_{io}_topic', False: '{io}_topic'}
@@ -28,6 +34,11 @@ class AnnounceTopic:
     control_method: Callable | None = field(default=None, metadata=dict(exclude=True))
 
     def set_parent(self, capability: Capability):
+        """
+
+        Set the parent capability for the topic and link it to the control's method.
+
+        """
         self.parent = capability
         if self.key is None:
             self.key = self.KEY_DEFAULTS[bool(self.capability.name)]
@@ -56,7 +67,12 @@ class AnnounceTopic:
     def topic(self):
         return self.fill(self.value)
 
-    def get_announce(self):
+    def get_announce(self) -> dict:
+        """
+
+        Get the discovery announcement data for the topic.
+
+        """
         return {self.topic_key: self.topic}
 
     @property
@@ -70,7 +86,12 @@ class AnnounceTopic:
     def callback_class_method_name(self):
         return f'{self.capability.control.__class__.__name__}.{self.callback_name}'
 
-    def get_subscriptions(self):
+    def get_subscriptions(self) -> dict:
+        """
+
+        Get the MQTT topic subscriptions for this topic (empty for base class).
+
+        """
         return {}
 
     @cached_property
@@ -83,12 +104,27 @@ class AnnounceTopic:
 
 @dataclass(kw_only=True)
 class AnnounceTopicState(AnnounceTopic):
+    """
+
+    MQTT topic for reporting state to Home Assistant.
+
+    """
     IO: ClassVar[str] = 'state'
 
-    def get_subscriptions(self):
+    def get_subscriptions(self) -> dict:
+        """
+
+        Get the MQTT topic subscriptions for this state topic (empty as it is output only).
+
+        """
         return {}
 
     async def handle(self, value=None):
+        """
+
+        Handle state reporting. Calls the linked control method and publishes the result.
+
+        """
 
         if not self.control_method:
             logger.error(f'Incomplete base class: {self.callback_class_method_name}')
@@ -115,6 +151,11 @@ class AnnounceTopicState(AnnounceTopic):
 
 @dataclass(kw_only=True)
 class AnnounceTopicCommand(AnnounceTopic):
+    """
+
+    MQTT topic for receiving commands from Home Assistant.
+
+    """
     IO: ClassVar[str] = 'command'
 
     @property
@@ -122,6 +163,11 @@ class AnnounceTopicCommand(AnnounceTopic):
         return self.capability.state
 
     async def handle(self, message):
+        """
+
+        Handle incoming command messages. Decodes, converts, calls the linked control method, and updates state.
+
+        """
 
         value = message.payload.decode('utf-8')
         value = self.capability.converters.command(value)
@@ -149,6 +195,10 @@ class AnnounceTopicCommand(AnnounceTopic):
         if topic_state:
             await topic_state.handle(value_raw)
 
+    def get_subscriptions(self) -> dict:
+        """
 
-    def get_subscriptions(self):
+        Get the MQTT topic subscriptions for this command topic.
+
+        """
         return {self.topic: self}

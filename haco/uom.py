@@ -4,6 +4,8 @@ from enum import StrEnum
 class Uom(StrEnum):
     """
 
+    Units of measurement for sensors.
+
     Sourced from: https://github.com/home-assistant/core/blob/03b1c7ad1deb4b9494df01b27ef8e1d7dfe179ba/homeassistant/const.py#L489
 
     """

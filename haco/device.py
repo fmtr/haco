@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from functools import cached_property
+from pathlib import Path
 from typing import List, TYPE_CHECKING
 
 from haco.base import Base
@@ -14,6 +15,11 @@ if TYPE_CHECKING:
 
 @dataclass(kw_only=True)
 class Device(Base):
+    """
+
+    A Home Assistant device, containing one or more controls.
+
+    """
     name: str
     manufacturer: str | None = None
     model: str | None = None
@@ -26,8 +32,12 @@ class Device(Base):
     parent: ClientHaco | None = field(metadata=dict(exclude=True), init=False)
     subscriptions: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
 
+    def set_parent(self, client: ClientHaco):
+        """
 
-    def set_parent(self, client):
+        Set the parent client for the device and its controls.
+
+        """
         self.parent = client
 
         self.identifiers = [self.name_san]
@@ -37,27 +47,57 @@ class Device(Base):
         self.subscriptions = self.get_subscriptions()
 
     @cached_property
-    def topic(self):
+    def topic(self) -> Path:
+        """
+
+        The MQTT topic prefix for the device.
+
+        """
         return self.client.topic / self.name_san
 
     @property
     def name_san(self) -> str:
+        """
+
+        Sanitized name of the device.
+
+        """
         return sanitize_name(self.name)
 
     async def announce(self):
+        """
+
+        Announce all controls of the device to Home Assistant.
+
+        """
         for control in self.controls:
             await control.announce()
 
     async def initialise(self):
+        """
+
+        Initialise all controls of the device.
+
+        """
         for control in self.controls:
             await control.initialise()
 
 
     @property
-    def client(self):
+    def client(self) -> ClientHaco:
+        """
+
+        The parent client of the device.
+
+        """
         return self.parent
 
     def get_subscriptions(self) -> dict:
+        """
+
+        Get all MQTT topic subscriptions for the device's controls.
+
+        """
         data = {}
         for control in self.controls:
             data |= control.subscriptions

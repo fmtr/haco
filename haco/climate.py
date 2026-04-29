@@ -7,6 +7,11 @@ from haco.control import Control
 
 @dataclass(kw_only=True)
 class Climate(Control):
+    """
+
+    A climate control for managing HVAC systems.
+
+    """
     DATA = dict(
         platform='climate'
     )
@@ -23,27 +28,61 @@ class Climate(Control):
     fan_modes: list[str] | None = None
     swing_modes: list[str] | None = None
 
+    def temperature_command(self, value: float) -> float:
+        """
 
-    def temperature_command(self, value):
+        Handle target temperature commands.
+
+        """
         raise NotImplementedError()
 
-    def mode_command(self, value):
+    def mode_command(self, value: str) -> str:
+        """
+
+        Handle HVAC mode commands.
+
+        """
         raise NotImplementedError()
 
-    def fan_mode_command(self, value):
+    def fan_mode_command(self, value: str) -> str:
+        """
+
+        Handle fan mode commands.
+
+        """
         raise NotImplementedError()
 
-    def fan_mode_state(self, value):
+    def fan_mode_state(self, value: str | None) -> str:
+        """
+
+        Return the current fan mode.
+
+        """
         raise NotImplementedError()
 
-    def power_command(self, value):
+    def power_command(self, value: bool) -> bool:
+        """
+
+        Handle power toggle commands.
+
+        """
         raise NotImplementedError()
 
-    def power_state(self, value):
+    def power_state(self, value: bool | None) -> bool:
+        """
+
+        Return the current power state.
+
+        """
         raise NotImplementedError()
 
     @classmethod
-    def get_capabilities(cls):
+    def get_capabilities(cls) -> list[Capability]:
+        """
+
+        Get the capabilities for the climate control.
+
+        """
         return [
             Capability(name="current_temperature", command=None),
             Capability(name="temperature"),

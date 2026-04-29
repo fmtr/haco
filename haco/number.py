@@ -14,6 +14,11 @@ class Mode(StrEnum):
 
 @dataclass(kw_only=True)
 class Number(Control):
+    """
+
+    A number control (slider or box) for numeric input in Home Assistant.
+
+    """
     DATA = dict(
         platform='number'
     )
@@ -25,8 +30,18 @@ class Number(Control):
     step: float = 1.
     uom: Uom | None = None
 
-    def command(self, value):
+    def command(self, value: float) -> float:
+        """
+
+        Handle numeric value commands from Home Assistant.
+
+        """
         raise NotImplementedError()
 
-    def state(self, value):
+    def state(self, value: float | None) -> float:
+        """
+
+        Return the current numeric state.
+
+        """
         raise NotImplementedError()

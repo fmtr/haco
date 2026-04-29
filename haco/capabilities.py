@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Type
 
 from corio.iterator_tools import strip_none
+
 from haco.base import Base
 from haco.topics import AnnounceTopicState, AnnounceTopicCommand
 from haco.utils import Converters
@@ -14,6 +15,11 @@ if TYPE_CHECKING:
 
 @dataclass(kw_only=True)
 class Capability(Base):
+    """
+
+    A capability groups a state and a command topic.
+
+    """
     name: str | None = None
 
     converters: Type[Converters] | None = field(default=None, metadata=dict(exclude=True))
@@ -25,7 +31,12 @@ class Capability(Base):
     parent: Control | None = None
     announce = None
 
-    def set_parent(self, control):
+    def set_parent(self, control: Control):
+        """
+
+        Set the parent control for the capability and its topics.
+
+        """
         self.parent = control
         for topic in self.topics:
             topic.set_parent(self)
@@ -33,21 +44,41 @@ class Capability(Base):
         self.converters = self.converters or self.control.converters
 
     def get_announce(self) -> dict:
+        """
+
+        Get the discovery announcement data for the capability's topics.
+
+        """
         data = {}
         for topic in self.topics:
             data |= topic.get_announce()
         return data
 
     def get_subscriptions(self) -> dict:
+        """
+
+        Get the MQTT topic subscriptions for the capability's command topics.
+
+        """
         data = {}
         for topic in self.topics:
             data |= topic.get_subscriptions()
         return data
 
     @property
-    def topics(self):
+    def topics(self) -> list:
+        """
+
+        The state and command topics for the capability.
+
+        """
         return strip_none(self.state, self.command)
 
     @property
-    def control(self):
+    def control(self) -> Control:
+        """
+
+        The parent control of the capability.
+
+        """
         return self.parent

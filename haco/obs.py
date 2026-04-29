@@ -1,6 +1,11 @@
-from corio import logging, debug, Constants
-from haco.paths import paths
+"""
 
+Observability and logging setup for the haco library.
+
+"""
+from corio import logging, debug, Constants
+
+from haco.paths import paths
 
 debug.trace()
 

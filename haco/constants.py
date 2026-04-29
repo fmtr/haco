@@ -1,6 +1,12 @@
+"""
+
+Global constants for the haco library.
+
+"""
 from __future__ import annotations
 
 from corio import env, Path, net
+
 from haco.paths import paths
 
 STATUS = 'status'
