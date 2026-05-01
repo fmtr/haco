@@ -20,6 +20,9 @@
             },
             {
                 "Control Types": "controls.md"
+            },
+            {
+                "Changelog": "changelog/"
             }
         ]
     },
