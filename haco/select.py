@@ -1,17 +1,16 @@
-from dataclasses import dataclass
+from typing import ClassVar
 
 from haco.control import Control
 from haco.utils import ConvertersString
 
 
-@dataclass(kw_only=True)
 class Select(Control):
     """
 
     A select control (dropdown) for choosing from a list of options in Home Assistant.
 
     """
-    DATA = dict(
+    DATA: ClassVar[dict] = dict(
         platform='select'
     )
     converters = ConvertersString

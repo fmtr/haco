@@ -1,16 +1,15 @@
-from dataclasses import dataclass
+from typing import ClassVar
 
 from haco.control import Control
 
 
-@dataclass(kw_only=True)
 class Switch(Control):
     """
 
     A switch control that can be toggled on or off.
 
     """
-    DATA = dict(
+    DATA: ClassVar[dict] = dict(
         platform='switch'
     )
 

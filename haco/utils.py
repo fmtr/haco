@@ -1,5 +1,4 @@
 import string
-from dataclasses import dataclass
 from typing import Callable
 
 from corio import json
@@ -79,16 +78,6 @@ class ConvertersNumeric(Converters):
     """
     command: Callable = json.from_json
     state: Callable = json.to_json
-
-@dataclass
-class Metadata:
-    """
-
-    Metadata for dataclass fields.
-
-    """
-    exclude: bool = False
-
 
 def get_prefix(io: str) -> str:
     """

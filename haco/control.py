@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypeVar, Generic, Type, ClassVar
+
+from pydantic import Field
 
 from corio import Constants
 from corio import Path
@@ -16,10 +17,9 @@ from haco.utils import sanitize_name, Converters, ConvertersBool, get_prefix
 if TYPE_CHECKING:
     from haco.device import Device
 
-DeviceT = TypeVar("DeviceT", bound="Device")
+DeviceT = TypeVar("DeviceT")
 
 
-@dataclass(kw_only=True)
 class Control(Base, Generic[DeviceT]):
     """
 
@@ -30,14 +30,14 @@ class Control(Base, Generic[DeviceT]):
 
     name: str
     icon: str | None = None
-    device: DeviceT = field(default=None, init=False)
-    capabilities: None | list[Capability] = field(default=None, metadata=dict(exclude=True))
-    unique_id: str | None = field(default=None, init=False)
-    availability_topic: str | None = field(default=None, init=False)
+    device: DeviceT | None = Field(default=None, exclude=True, repr=False)
+    capabilities: list = Field(default_factory=list, exclude=True, repr=False)
+    unique_id: str | None = None
+    availability_topic: str | None = None
 
-    subscriptions: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
+    subscriptions: dict | None = Field(default=None, exclude=True, repr=False)
 
-    def __post_init__(self):
+    def model_post_init(self, __context):
         self.capabilities = self.get_capabilities()
 
         if not self.icon:

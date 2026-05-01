@@ -1,18 +1,16 @@
-from dataclasses import dataclass
-from typing import Literal
+from typing import Literal, ClassVar
 
 from haco.capabilities import Capability
 from haco.control import Control
 
 
-@dataclass(kw_only=True)
 class Climate(Control):
     """
 
     A climate control for managing HVAC systems.
 
     """
-    DATA = dict(
+    DATA: ClassVar[dict] = dict(
         platform='climate'
     )
 

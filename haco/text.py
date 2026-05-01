@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 from enum import StrEnum
+from typing import ClassVar
 
 from haco.control import Control
 from haco.utils import ConvertersString
@@ -10,14 +10,13 @@ class Mode(StrEnum):
     PASSWORD = "password"
 
 
-@dataclass(kw_only=True)
 class Text(Control):
     """
 
     A text control for text input in Home Assistant.
 
     """
-    DATA = dict(
+    DATA: ClassVar[dict] = dict(
         platform='text'
     )
     converters = ConvertersString

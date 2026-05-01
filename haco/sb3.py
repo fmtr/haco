@@ -4,7 +4,6 @@ import logging
 from haco.button import Button
 from haco.client import ClientHaco
 from haco.climate import Climate
-from haco.constants import MQTT_HOST
 from haco.device import Device
 from haco.obs import logger
 from haco.select import Select
@@ -23,7 +22,7 @@ async def main():
     sel1 = Select(name="Dev Select 1", options=['a', 'b', 'c'])
     device = Device(name="Dev Device", controls=[climate_a, climate_b, b1, s1, sel1])
 
-    client = ClientHaco(hostname=MQTT_HOST, device=device, logger=logging.getLogger(__name__))
+    client = ClientHaco(hostname='mqtt.service', device=device, logger=logging.getLogger(__name__))
 
     await client.start()
 

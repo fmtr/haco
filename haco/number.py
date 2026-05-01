@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from enum import StrEnum
 from typing import ClassVar, Type
 
@@ -12,14 +11,13 @@ class Mode(StrEnum):
     SLIDER = "slider"
 
 
-@dataclass(kw_only=True)
 class Number(Control):
     """
 
     A number control (slider or box) for numeric input in Home Assistant.
 
     """
-    DATA = dict(
+    DATA: ClassVar[dict] = dict(
         platform='number'
     )
     converters: ClassVar[Type[Converters]] = ConvertersNumeric

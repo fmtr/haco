@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from functools import cached_property
 from pathlib import Path
 from typing import List, TYPE_CHECKING
+
+from pydantic import Field
 
 from haco.base import Base
 from haco.control import Control
@@ -13,7 +14,6 @@ if TYPE_CHECKING:
     from haco.client import ClientHaco
 
 
-@dataclass(kw_only=True)
 class Device(Base):
     """
 
@@ -25,12 +25,17 @@ class Device(Base):
     model: str | None = None
     sw_version: str | None = None
 
-    identifiers: list[str] | None = field(default=None, init=False)
+    identifiers: list[str] | None = None
 
-    controls: List[Control] = field(default_factory=list, metadata=dict(exclude=True))
+    controls: List[Control] = Field(default_factory=list, exclude=True, repr=False)
 
-    parent: ClientHaco | None = field(metadata=dict(exclude=True), init=False)
-    subscriptions: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
+    parent: ClientHaco | None = Field(default=None, exclude=True, repr=False)
+    subscriptions: dict | None = Field(default=None, exclude=True, repr=False)
+
+    def __init__(self, **kwargs):
+        from haco.client import ClientHaco
+        ClientHaco == ClientHaco
+        super().__init__(**kwargs)
 
     def set_parent(self, client: ClientHaco):
         """

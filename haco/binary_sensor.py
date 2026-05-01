@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 from enum import StrEnum
+from typing import ClassVar
 
 from haco.capabilities import Capability
 from haco.control import Control
@@ -43,14 +43,13 @@ class DeviceClass(StrEnum):
     WINDOW = "window"  # on means open, off means closed
 
 
-@dataclass(kw_only=True)
 class BinarySensor(Control):
     """
 
     A binary sensor for reporting on/off states to Home Assistant.
 
     """
-    DATA = dict(
+    DATA: ClassVar[dict] = dict(
         platform='binary_sensor'
     )
 

@@ -1,17 +1,16 @@
-from dataclasses import dataclass
+from typing import ClassVar
 
 from haco.capabilities import Capability
 from haco.control import Control
 
 
-@dataclass(kw_only=True)
 class Button(Control):
     """
 
     A button control that can be pressed in Home Assistant.
 
     """
-    DATA = dict(
+    DATA: ClassVar[dict] = dict(
         platform='button'
     )
 

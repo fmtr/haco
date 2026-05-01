@@ -11,6 +11,6 @@ debug.trace()
 
 logger = logging.get_logger(
     name=paths.name_ns,
-    stream=Constants.INFRA,
+    stream=Constants.DEVELOPMENT,
     version=paths.metadata.version,
 )

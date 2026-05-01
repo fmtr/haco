@@ -1,6 +1,5 @@
-from dataclasses import dataclass
 from enum import StrEnum
-from typing import Any
+from typing import Any, ClassVar
 
 from haco.capabilities import Capability
 from haco.control import Control
@@ -67,14 +66,13 @@ class DeviceClass(StrEnum):
     WIND_SPEED = "wind_speed"  # Wind speed in ft/s, km/h, kn, m/s, or mph.
 
 
-@dataclass(kw_only=True)
 class Sensor(Control):
     """
 
     A sensor control for reporting numeric or string values to Home Assistant.
 
     """
-    DATA = dict(
+    DATA: ClassVar[dict] = dict(
         platform='sensor'
     )
     converters = ConvertersString

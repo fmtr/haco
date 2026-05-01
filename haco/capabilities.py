@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING, Type, ClassVar
+
+from pydantic import Field
 
 from corio.iterator_tools import strip_none
 
@@ -13,7 +14,6 @@ if TYPE_CHECKING:
     from haco.control import Control
 
 
-@dataclass(kw_only=True)
 class Capability(Base):
     """
 
@@ -22,14 +22,19 @@ class Capability(Base):
     """
     name: str | None = None
 
-    converters: Type[Converters] | None = field(default=None, metadata=dict(exclude=True))
+    converters: Type[Converters] | None = Field(default=None, exclude=True, repr=False)
 
-    state: AnnounceTopicState | None = field(default_factory=AnnounceTopicState)
-    command: AnnounceTopicCommand | None = field(default_factory=AnnounceTopicCommand)
+    state: AnnounceTopicState | None = Field(default_factory=AnnounceTopicState)
+    command: AnnounceTopicCommand | None = Field(default_factory=AnnounceTopicCommand)
 
 
-    parent: Control | None = None
-    announce = None
+    parent: Control | None = Field(default=None, exclude=True, repr=False)
+    announce: ClassVar[None] = None
+
+    def __init__(self, **kwargs):
+        from haco.control import Control
+        Control == Control
+        super().__init__(**kwargs)
 
     def set_parent(self, control: Control):
         """

@@ -1,20 +1,21 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from functools import cached_property
 from typing import ClassVar, TYPE_CHECKING, Callable
 
+from pydantic import Field
+
 from corio import aio, Constants
 
+from haco.base import Base
 from haco.obs import logger
 from haco.utils import get_prefix
 
 if TYPE_CHECKING:
-    from capabilities import Capability
+    from haco.capabilities import Capability
 
 
-@dataclass(kw_only=True)
-class AnnounceTopic:
+class AnnounceTopic(Base):
     """
 
     Base class for MQTT topics used for discovery and communication.
@@ -27,11 +28,16 @@ class AnnounceTopic:
     key: str | None = None
     value: str = '{path}/{capability}/{io}'
 
-    parent: Capability | None = None
-    announce: dict | None = field(default=None, metadata=dict(exclude=True))
-    subscriptions: dict | None = field(default=None, metadata=dict(exclude=True), init=False)
+    parent: Capability | None = Field(default=None, exclude=True, repr=False)
+    announce: dict | None = Field(default=None, exclude=True, repr=False)
+    subscriptions: dict | None = Field(default=None, exclude=True, repr=False)
 
-    control_method: Callable | None = field(default=None, metadata=dict(exclude=True))
+    control_method: Callable | None = Field(default=None, exclude=True, repr=False)
+
+    def __init__(self, **kwargs):
+        from haco.capabilities import Capability
+        Capability == Capability
+        super().__init__(**kwargs)
 
     def set_parent(self, capability: Capability):
         """
@@ -102,7 +108,6 @@ class AnnounceTopic:
         raise NotImplementedError()
 
 
-@dataclass(kw_only=True)
 class AnnounceTopicState(AnnounceTopic):
     """
 
@@ -149,7 +154,6 @@ class AnnounceTopicState(AnnounceTopic):
 
         return value_raw
 
-@dataclass(kw_only=True)
 class AnnounceTopicCommand(AnnounceTopic):
     """
 

@@ -1,18 +1,17 @@
-from dataclasses import dataclass
+from typing import ClassVar
 
 from haco.capabilities import Capability
 from haco.control import Control
 from haco.utils import ON, OFF, ConvertersNumeric, ConvertersString
 
 
-@dataclass(kw_only=True)
 class Fan(Control):
     """
 
     A fan control with support for speed percentage, preset modes, and oscillation.
 
     """
-    DATA = dict(
+    DATA: ClassVar[dict] = dict(
         platform="fan"
     )
 
