@@ -24,7 +24,4 @@ If you're building a custom IoT device, a script to monitor your system, or just
 
 ## Documentation
 
-[See Documentation](docs/index.md)
-
-- [Quick Start](docs/quick-start.md)
-- [Control Types](docs/controls.md)
+[See Documentation](https://fmtr.link/haco/doc)

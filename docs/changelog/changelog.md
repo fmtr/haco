@@ -1,0 +1,6 @@
+- Refactored core models from `dataclass` to Pydantic across active entities (`Base`, `Device`, `Control`, `Capability`, topic models, and concrete control types like `Switch`, `Climate`, `Sensor`, etc.).
+- Replaced dataclass-specific field metadata (`metadata=dict(exclude=True)`, `field(...)`, `__post_init__`) with native Pydantic patterns (`Field(...)`, `model_post_init`, class inheritance from `corio.dm.Base`).
+- Updated parent/back-reference handling to follow the parent-typing pattern, including explicit in-`__init__` imports for forward references (e.g. `Device.parent: ClientHaco | None`).
+- Reworked `Base.model_dump()` to preserve discovery behavior by merging class `DATA`, defaulting to `exclude_none=True`, and excluding runtime extra attributes so dynamic callbacks do not leak into HA announce payloads.
+- Cleaned up dataclass leftovers by removing the unused `Metadata` helper from `haco/utils.py` and simplifying related imports.
+- Added packaging metadata and testing support updates: `pyproject.toml` project metadata/uv source config, `setup.py` test extras (`pytest`, `pytest-cov`), and initial `haco/tests` package scaffolding.

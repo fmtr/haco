@@ -4,8 +4,16 @@ build-backend = "setuptools.build_meta" #
 
 [project]
 name= "haco"
-dynamic = ["description", "readme", "version", "dependencies", "optional-dependencies"]
+dynamic = [
+    "description",
+    "readme",
+    "version",
+    "dependencies",
+    "optional-dependencies",
+    "license",
+    "authors",
+    "keywords",
+]
 
 [tool.uv.sources]
 corio = { path = "../corio", editable = true }
-
