@@ -3,7 +3,7 @@ requires = ["setuptools>=82", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.corio.metadata]
-version = "0.3.2"
+version = "0.3.3-alpha000"
 port = 6
 base = "python"
 description = "Home Assistant Control Objects"
@@ -44,11 +44,10 @@ editable = true
 
 [project]
 name = "haco"
-version = "0.3.2"
+version = "0.3.3-alpha000"
 description = "Home Assistant Control Objects"
 readme = "README.md"
 license = "Apache-2.0"
-license-files = ["LICENSE"]
 keywords = ["homeassistant", "controls", "python", "tasmota"]
 dependencies = ["corio[version.dev,logging,sets,yaml,debug,caching,api,mqtt]", "psutil"]
 
