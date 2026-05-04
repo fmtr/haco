@@ -36,7 +36,7 @@ include = ["haco*"]
 namespaces = false
 
 [tool.setuptools.package-data]
-haco = ["pyproject.toml"]
+haco = ["pyproject.package.toml"]
 
 [tool.uv.sources.corio]
 path = "../corio"
