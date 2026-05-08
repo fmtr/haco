@@ -16,18 +16,6 @@ keywords = ["homeassistant", "controls", "python", "tasmota"]
 is_pypi = true
 is_dockerhub = false
 
-[[tool.corio.metadata.docs.nav]]
-Home = "index.md"
-
-[[tool.corio.metadata.docs.nav]]
-"Quick Start" = "quick-start.md"
-
-[[tool.corio.metadata.docs.nav]]
-"Control Types" = "controls.md"
-
-[[tool.corio.metadata.docs.nav]]
-Changelog = "changelog/"
-
 [tool.corio.metadata.setup]
 
 [tool.setuptools.packages.find]
