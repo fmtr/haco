@@ -11,8 +11,10 @@
       
       
       
-        <link rel="prev" href="../0.3.4/">
+        <link rel="prev" href="../../controls/">
       
+      
+        <link rel="next" href="../0.3.0/">
       
       
         
@@ -23,7 +25,7 @@
     
     
       
-        <title>0.3.0 - haco</title>
+        <title>0.3.4 - haco</title>
       
     
     
@@ -101,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              0.3.0
+              0.3.4
             
           </span>
         </div>
@@ -354,34 +356,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../0.3.4/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    0.3.4
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -399,7 +373,7 @@
   <span class="md-ellipsis">
     
   
-    0.3.0
+    0.3.4
   
 
     
@@ -409,6 +383,34 @@
 
       </a>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0.3.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.3.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -457,15 +459,11 @@
   
 
 
-  <h1>0.3.0</h1>
+  <h1>0.3.4</h1>
 
 <ul>
-<li>Refactored core models from <code>dataclass</code> to Pydantic across active entities (<code>Base</code>, <code>Device</code>, <code>Control</code>, <code>Capability</code>, topic models, and concrete control types like <code>Switch</code>, <code>Climate</code>, <code>Sensor</code>, etc.).</li>
-<li>Replaced dataclass-specific field metadata (<code>metadata=dict(exclude=True)</code>, <code>field(...)</code>, <code>__post_init__</code>) with native Pydantic patterns (<code>Field(...)</code>, <code>model_post_init</code>, class inheritance from <code>corio.dm.Base</code>).</li>
-<li>Updated parent/back-reference handling to follow the parent-typing pattern, including explicit in-<code>__init__</code> imports for forward references (e.g. <code>Device.parent: ClientHaco | None</code>).</li>
-<li>Reworked <code>Base.model_dump()</code> to preserve discovery behavior by merging class <code>DATA</code>, defaulting to <code>exclude_none=True</code>, and excluding runtime extra attributes so dynamic callbacks do not leak into HA announce payloads.</li>
-<li>Cleaned up dataclass leftovers by removing the unused <code>Metadata</code> helper from <code>haco/utils.py</code> and simplifying related imports.</li>
-<li>Added packaging metadata and testing support updates: <code>pyproject.toml</code> project metadata/uv source config, <code>setup.py</code> test extras (<code>pytest</code>, <code>pytest-cov</code>), and initial <code>haco/tests</code> package scaffolding.</li>
+<li>Updated for <code>corio</code> module refactors by switching imports to current paths (<code>corio.iterator</code>, <code>corio.jsn</code>, <code>corio.datatype</code>, and <code>corio.logs</code>) across capabilities, control serialization, converters, and logging setup.</li>
+<li>Added <code>haco/tests/test_pydantic_models.py</code> coverage to verify Home Assistant announce payload shape for <code>Switch</code> and <code>Climate</code>, runtime-attribute exclusion from <code>model_dump()</code>, and parent/subscription wiring behavior.</li>
 </ul>
 
 
