@@ -1,1 +1,1 @@
-docs/changelog/0.3.0.md
+docs/changelog/0.3.4.md
