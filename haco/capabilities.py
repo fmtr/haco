@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Type, ClassVar
 
 from pydantic import Field
 
-from corio.iterator_tools import strip_none
+from corio.iterator import strip_none
 
 from haco.base import Base
 from haco.topics import AnnounceTopicState, AnnounceTopicCommand

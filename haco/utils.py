@@ -1,8 +1,8 @@
 import string
 from typing import Callable
 
-from corio import json
-from corio.datatype_tools import to_bool
+from corio import jsn
+from corio.datatype import to_bool
 
 CHARS_ALLOWED = string.ascii_lowercase + string.digits
 SEPS = '_- /'
@@ -76,8 +76,8 @@ class ConvertersNumeric(Converters):
     Converters for numeric values.
 
     """
-    command: Callable = json.from_json
-    state: Callable = json.to_json
+    command: Callable = jsn.from_json
+    state: Callable = jsn.to_json
 
 def get_prefix(io: str) -> str:
     """

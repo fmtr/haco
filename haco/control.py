@@ -6,7 +6,7 @@ from pydantic import Field
 
 from corio import Constants
 from corio import Path
-from corio.json_tools import to_json
+from corio.jsn import to_json
 
 from haco.base import Base
 from haco.capabilities import Capability
