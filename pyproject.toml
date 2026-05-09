@@ -3,7 +3,7 @@ requires = ["setuptools>=82", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.corio.metadata]
-version = "0.3.8-alpha000"
+version = "0.3.8"
 port = 6
 base = "python"
 description = "Home Assistant Control Objects"
@@ -38,7 +38,7 @@ env_list = []
 
 [project]
 name = "haco"
-version = "0.3.8-alpha000"
+version = "0.3.8"
 description = "Home Assistant Control Objects"
 readme = "README.md"
 license = "Apache-2.0"
