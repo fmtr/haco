@@ -50,7 +50,7 @@ name = "Frontmatter AI"
 email = "innovative.fowler@mask.pro.fmtr.dev"
 
 [project.optional-dependencies]
-test = ["pytest>=8.0", "pytest-cov>=5.0"]
+test = ["corio[test]"]
 
 [project.urls]
 Homepage = "https://github.com/fmtr/haco"
