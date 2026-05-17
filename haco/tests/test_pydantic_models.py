@@ -31,6 +31,10 @@ def test_switch_announce_payload_matches_expected(client_stub):
         "icon": "mdi:power",
         "unique_id": "dev-main",
         "availability_topic": "root/status",
+        "device": {
+            "name": "Dev",
+            "identifiers": ["dev"],
+        },
         "state_topic": "root/client/dev/main/default/state",
         "command_topic": "root/client/dev/main/default/command",
     }
@@ -59,8 +63,32 @@ def test_climate_announce_payload_has_expected_ha_keys(client_stub):
         "power_state_topic",
     }
     assert expected_subset.issubset(set(data))
-    assert not any(key in data for key in {"capabilities", "subscriptions", "device", "parent"})
+    assert not any(key in data for key in {"capabilities", "subscriptions", "parent"})
     assert not any(callable(value) for value in data.values())
+
+
+def test_control_announce_includes_device_announce_data(client_stub):
+    switch = Switch(name="Main")
+    device = Device(
+        name="Dev",
+        manufacturer="ACME",
+        model="Model X",
+        sw_version="1.2.3",
+        controls=[switch],
+    )
+    device.set_parent(client_stub)
+
+    data = switch.get_announce()
+    assert data["device"] == {
+        "name": "Dev",
+        "manufacturer": "ACME",
+        "model": "Model X",
+        "sw_version": "1.2.3",
+        "identifiers": ["dev"],
+    }
+    assert "controls" not in data["device"]
+    assert "parent" not in data["device"]
+    assert "subscriptions" not in data["device"]
 
 
 def test_model_dump_excludes_runtime_extra_attributes():
