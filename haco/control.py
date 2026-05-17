@@ -30,7 +30,7 @@ class Control(Base, Generic[DeviceT]):
 
     name: str
     icon: str | None = None
-    device: DeviceT | None = Field(default=None, exclude=True, repr=False)
+    device: DeviceT | None = Field(default=None, repr=False)
     capabilities: list = Field(default_factory=list, exclude=True, repr=False)
     unique_id: str | None = None
     availability_topic: str | None = None
