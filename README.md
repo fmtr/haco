@@ -1,6 +1,6 @@
 # `haco` Home Assistant Control Objects
 
-`haco` is a to greatly simplify the process of exposing Home Assistant controls (e.g. Pull-down Lists, Number Sliders, Sensors, etc.) from a device - and handling the communication between both sides.
+`haco` greatly simplifies the process of exposing Home Assistant controls (e.g. Pull-down Lists, Number Sliders, Sensors, etc.) from a device - and handling the communication between both sides.
 
 While the current implementation is in Python, the capability definitions for controls are designed to be shared across different languages. Support for additional languages (namely native support for Tasmota Berry) is planned.
 
