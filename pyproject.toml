@@ -3,7 +3,7 @@ requires = ["setuptools>=82", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.corio.metadata]
-version = "0.4.0"
+version = "0.4.1"
 port = 6
 base = "python"
 description = "Home Assistant Control Objects"
@@ -24,7 +24,7 @@ include = ["haco*"]
 namespaces = false
 
 [tool.setuptools.package-data]
-haco = ["pyproject.package.toml"]
+haco = ["pyproject.package.toml", "assets/**"]
 
 [tool.uv.sources.corio]
 path = "../corio"
@@ -38,19 +38,19 @@ env_list = []
 
 [project]
 name = "haco"
-version = "0.4.0"
+version = "0.4.1"
 description = "Home Assistant Control Objects"
 readme = "README.md"
 license = "Apache-2.0"
 keywords = ["homeassistant", "controls", "python", "tasmota"]
-dependencies = ["corio[api,caching,debug,logging,mqtt,sets,version.dev,yaml]~=2.7.3", "psutil"]
+dependencies = ["corio[api,caching,debug,logging,mqtt,sets,version.dev,yaml]~=2.8.0", "psutil"]
 
 [[project.authors]]
 name = "Frontmatter AI"
 email = "innovative.fowler@mask.pro.fmtr.dev"
 
 [project.optional-dependencies]
-test = ["corio[test]~=2.7.3"]
+test = ["corio[test]~=2.8.0"]
 
 [project.urls]
 Homepage = "https://github.com/fmtr/haco"
