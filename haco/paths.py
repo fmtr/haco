@@ -3,6 +3,6 @@
 Path definitions for the haco library.
 
 """
-from corio import sets
+from corio import paths
 
-paths = sets.PackagePaths()
+paths = paths.PackagePaths()
