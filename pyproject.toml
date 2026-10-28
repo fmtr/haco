@@ -32,9 +32,12 @@ editable = true
 
 [tool.tox]
 requires = ["tox>=4.22", "tox-uv>=1"]
-env_list = []
+env_list = ["haco"]
 
-[tool.tox.env]
+[tool.tox.env.haco]
+description = "Run haco tests."
+deps = ["corio[test]~=2.15.10"]
+commands = [["python", "-m", "pytest", "-q", "{posargs:haco/tests}"]]
 
 [project]
 name = "haco"
@@ -50,9 +53,13 @@ name = "Frontmatter AI"
 email = "innovative.fowler@mask.pro.fmtr.dev"
 
 [project.optional-dependencies]
+dev = ["corio[infra]~=2.15.10"]
 test = ["corio[test]~=2.15.10"]
 
 [project.urls]
 Homepage = "https://github.com/fmtr/haco"
 
 [project.scripts]
+
+[dependency-groups]
+dev = ["corio[infra]~=2.15.10"]
