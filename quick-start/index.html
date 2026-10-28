@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
       
 
@@ -325,6 +325,8 @@
       
         
       
+        
+      
     
     
     
@@ -421,6 +423,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/0.4.3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    0.4.3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -482,26 +512,26 @@
 
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
     <span class="c1"># 1. Define your controls</span>
-    <span class="n">btn</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;My Awesome Button&quot;</span><span class="p">)</span>
+    <span class="n">btn</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"My Awesome Button"</span><span class="p">)</span>
 
     <span class="c1"># 2. Group them into a device</span>
-    <span class="n">device</span> <span class="o">=</span> <span class="n">Device</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;My Cool Device&quot;</span><span class="p">,</span> <span class="n">controls</span><span class="o">=</span><span class="p">[</span><span class="n">btn</span><span class="p">])</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="n">Device</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"My Cool Device"</span><span class="p">,</span> <span class="n">controls</span><span class="o">=</span><span class="p">[</span><span class="n">btn</span><span class="p">])</span>
 
     <span class="c1"># 3. Create and start the client</span>
-    <span class="c1"># Replace &#39;mqtt.service&#39; with your MQTT broker&#39;s address</span>
-    <span class="n">client</span> <span class="o">=</span> <span class="n">ClientHaco</span><span class="p">(</span><span class="n">hostname</span><span class="o">=</span><span class="s1">&#39;mqtt.service&#39;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+    <span class="c1"># Replace 'mqtt.service' with your MQTT broker's address</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">ClientHaco</span><span class="p">(</span><span class="n">hostname</span><span class="o">=</span><span class="s1">'mqtt.service'</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Starting haco client...&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Starting haco client..."</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </code></pre></div>
 <h1 id="what-happens-next">What Happens Next?</h1>
 <ol>
 <li><strong>Discovery</strong>: When the script runs, it sends discovery messages to Home Assistant.</li>
-<li><strong>Entity Created
-   </strong>: A new device named "My Cool Device" will appear in Home Assistant with a button entity named "My Awesome Button".</li>
+<li>**Entity Created
+   **: A new device named "My Cool Device" will appear in Home Assistant with a button entity named "My Awesome Button".</li>
 <li><strong>Control</strong>: When you press the button in the Home Assistant UI,
    <code>haco</code> will receive the command. You can then handle this command in your Python script by overriding the
    <code>command</code> method or providing a callback (see <a href="../controls/">Control Types</a> for more details).</li>
@@ -558,7 +588,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.indexes", "content.code.annotate", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
