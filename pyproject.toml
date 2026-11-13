@@ -3,7 +3,7 @@ requires = ["setuptools>=82", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.corio.metadata]
-version = "0.4.5"
+version = "0.4.6-alpha.0"
 port = 6
 base = "python"
 description = "Home Assistant Control Objects"
@@ -15,6 +15,7 @@ services = []
 keywords = ["homeassistant", "controls", "python", "tasmota"]
 is_pypi = true
 is_dockerhub = false
+editables = ["corio"]
 
 [tool.corio.metadata.setup]
 
@@ -30,31 +31,35 @@ haco = ["pyproject.package.toml", "assets/**"]
 path = "../corio"
 editable = true
 
+[tool.uv.config-settings-package.corio]
+editable_mode = "compat"
+
 [tool.tox]
 requires = ["tox>=4.22", "tox-uv>=1"]
 env_list = ["haco"]
 
 [tool.tox.env.haco]
 description = "Run haco tests."
-deps = ["corio[test]~=2.15.10"]
+deps = ["corio[test]~=2.17.8"]
 commands = [["python", "-m", "pytest", "-q", "{posargs:haco/tests}"]]
+install_command = ["uv", "pip", "install", "--refresh-package", "corio", "{opts}", "{packages}"]
 
 [project]
 name = "haco"
-version = "0.4.5"
+version = "0.4.6-alpha.0"
 description = "Home Assistant Control Objects"
 readme = "README.md"
 license = "Apache-2.0"
 keywords = ["homeassistant", "controls", "python", "tasmota"]
-dependencies = ["corio[api,caching,debug,logging,mqtt,sets,version.dev,yaml]~=2.15.10", "psutil"]
+dependencies = ["corio[api,caching,debug,logging,mqtt,sets,yaml]~=2.17.8", "psutil"]
 
 [[project.authors]]
 name = "Frontmatter AI"
 email = "innovative.fowler@mask.pro.fmtr.dev"
 
 [project.optional-dependencies]
-dev = ["corio[infra]~=2.15.10"]
-test = ["corio[test]~=2.15.10"]
+dev = ["corio[infra]~=2.17.8"]
+test = ["corio[test]~=2.17.8"]
 
 [project.urls]
 Homepage = "https://github.com/fmtr/haco"
@@ -62,4 +67,4 @@ Homepage = "https://github.com/fmtr/haco"
 [project.scripts]
 
 [dependency-groups]
-dev = ["corio[infra]~=2.15.10"]
+dev = ["corio[infra]~=2.17.8"]
